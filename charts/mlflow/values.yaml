@@ -9,7 +9,7 @@ replicaCount: 1
 # -- Image of mlflow
 image:
   # -- The docker image repository to use
-  repository: burakince/mlflow
+  repository: ghcr.io/mlflow/mlflow
   # -- The docker image pull policy
   pullPolicy: IfNotPresent
   # -- The docker image tag to use. Default app version
@@ -28,7 +28,7 @@ initImages:
   # -- mlflow-db-migration init container image configuration
   mlflowDbMigration:
     # -- mlflow-db-migration init container image repository to use.
-    repository: burakince/mlflow
+    repository: ghcr.io/mlflow/mlflow
     # -- mlflow-db-migration init container image pull policy.
     pullPolicy: IfNotPresent
     # -- mlflow-db-migration init container image tag to use. Default app version

@@ -14,21 +14,19 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 1.8.1
+version: 1.9.0
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
-appVersion: "3.7.0"
+appVersion: "3.10.1"
 kubeVersion: ">=1.16.0-0"
 home: https://mlflow.org
 maintainers:
-  - name: burakince
-    email: burak.ince@linux.org.tr
-    url: https://www.burakince.com
+  - name: orangewise
+    url: https://github.com/orangewise
 sources:
-  - https://github.com/community-charts/helm-charts
-  - https://github.com/burakince/mlflow
+  - https://github.com/mlflow-community/helm-charts
   - https://github.com/mlflow/mlflow
 keywords:
   - docker
@@ -44,30 +42,23 @@ keywords:
 annotations:
   artifacthub.io/links: |
     - name: Chart Source
-      url: https://github.com/community-charts/helm-charts
-    - name: Chart Usage Page
-      url: https://community-charts.github.io/docs/charts/mlflow/usage
+      url: https://github.com/mlflow-community/helm-charts
     - name: Upstream Project
-      url: https://github.com/burakince/mlflow
+      url: https://github.com/mlflow/mlflow
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
     - kind: changed
-      description: Update burakince/mlflow image version to 3.7.0
+      description: Switch to official ghcr.io/mlflow/mlflow image and update to 3.10.1
       links:
-        - name: Upstream Project
-          url: https://hub.docker.com/r/burakince/mlflow
-    - kind: changed
-      description: Update dependency postgresql from 18.1.7 to 18.1.13
-      links:
-        - name: ArtifactHub
-          url: https://artifacthub.io/packages/helm/bitnami/postgresql
+        - name: Upstream Image
+          url: https://github.com/mlflow/mlflow/pkgs/container/mlflow
   artifacthub.io/images: |
     - name: mlflow
-      image: burakince/mlflow:3.7.0
+      image: ghcr.io/mlflow/mlflow:3.10.1
   artifacthub.io/license: MIT
   artifacthub.io/maintainers: |
-    - name: burakince
-      email: burak.ince@linux.org.tr
+    - name: orangewise
+      url: https://github.com/orangewise
   artifacthub.io/operator: "false"
   artifacthub.io/prerelease: "false"
   artifacthub.io/screenshots: |
@@ -91,9 +82,6 @@ annotations:
       url: https://raw.githubusercontent.com/mlflow/mlflow/refs/heads/master/docs/static/images/oss_registry_6_version.png
     - title: Experiment compare
       url: https://raw.githubusercontent.com/mlflow/mlflow/refs/heads/master/docs/static/images/tutorial-compare.png
-  artifacthub.io/signKey: |
-    fingerprint: 939B1A0ED8AAA8E722ACCDB3B6A012EE8A76426A
-    url: https://keybase.io/communitycharts/pgp_keys.asc
 dependencies:
   - name: postgresql
     version: 18.1.13
