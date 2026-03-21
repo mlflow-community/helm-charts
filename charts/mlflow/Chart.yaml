@@ -20,7 +20,7 @@ version: 1.9.0
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
 appVersion: "3.10.1"
-kubeVersion: ">=1.16.0-0"
+kubeVersion: ">=1.23.0-0"
 home: https://mlflow.org
 maintainers:
   - name: orangewise

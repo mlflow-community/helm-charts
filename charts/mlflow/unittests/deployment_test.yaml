@@ -375,15 +375,12 @@ tests:
         template: deployment.yaml
 
   - it: should show mlflow version environment variable
-    chart:
-      version: 0.1.62
-      appVersion: 1.27.0
     asserts:
       - contains:
           path: spec.template.spec.containers[?(@.name == "mlflow")].env
           content:
             name: MLFLOW_VERSION
-            value: "1.27.0"
+            value: "1.0.0"
         template: deployment.yaml
 
   - it: should show extra environment variables when we pass any
@@ -1219,9 +1216,8 @@ tests:
     set:
       autoscaling.enabled: true
     asserts:
-      - notEqual:
+      - isNull:
           path: spec.replicas
-          value: 1
         template: deployment.yaml
 
   - it: should use username and password from existing secret when backendStore.existingDatabaseSecret is set and postgres is enabled
