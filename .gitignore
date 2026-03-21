@@ -6,3 +6,6 @@ charts/*/charts/
 
 # OS
 .DS_Store
+
+# Claude Code personal settings
+.claude/settings.local.json

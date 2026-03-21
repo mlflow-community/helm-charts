@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git:*)",
+      "Bash(helm:*)",
+      "Bash(curl:*)",
+      "Bash(unzip:*)",
+      "Bash(python3:*)",
+      "Bash(rm -rf /Users/ronald/Library/helm/plugins/helm-unittest)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:api.github.com)",
+      "WebSearch"
+    ]
+  }
+}
