@@ -68,7 +68,7 @@ should match snapshot of default values:
                     name: mlflow-env-secret
                 - secretRef:
                     name: mlflow-flask-server-secret-key
-              image: ghcr.io/mlflow/mlflow:1.0.0
+              image: ghcr.io/mlflow/mlflow:1.0.0-full
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 5
@@ -274,7 +274,7 @@ should match snapshot with additional values:
                     name: mlflow-env-secret
                 - secretRef:
                     name: mlflow-flask-server-secret-key
-              image: ghcr.io/mlflow/mlflow:1.0.0
+              image: ghcr.io/mlflow/mlflow:1.0.0-full
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 5
@@ -354,7 +354,7 @@ should match snapshot with additional values:
                     name: mlflow-env-secret
                 - secretRef:
                     name: mlflow-flask-server-secret-key
-              image: ghcr.io/mlflow/mlflow:1.0.0
+              image: ghcr.io/mlflow/mlflow:1.0.0-full
               imagePullPolicy: IfNotPresent
               name: mlflow-db-migration
               resources:
@@ -613,7 +613,7 @@ should match snapshot with additional values when auth and auth.postgres are ena
                     name: mlflow-env-secret
                 - secretRef:
                     name: mlflow-flask-server-secret-key
-              image: ghcr.io/mlflow/mlflow:1.0.0
+              image: ghcr.io/mlflow/mlflow:1.0.0-full
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 5
@@ -693,7 +693,7 @@ should match snapshot with additional values when auth and auth.postgres are ena
                     name: mlflow-env-secret
                 - secretRef:
                     name: mlflow-flask-server-secret-key
-              image: ghcr.io/mlflow/mlflow:1.0.0
+              image: ghcr.io/mlflow/mlflow:1.0.0-full
               imagePullPolicy: IfNotPresent
               name: mlflow-db-migration
               resources:
@@ -975,7 +975,7 @@ should match snapshot with additional values when bitnami mysql is enabled:
                     name: mlflow-env-secret
                 - secretRef:
                     name: mlflow-flask-server-secret-key
-              image: ghcr.io/mlflow/mlflow:1.0.0
+              image: ghcr.io/mlflow/mlflow:1.0.0-full
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 5
@@ -1069,7 +1069,7 @@ should match snapshot with additional values when bitnami mysql is enabled:
                     name: mlflow-env-secret
                 - secretRef:
                     name: mlflow-flask-server-secret-key
-              image: ghcr.io/mlflow/mlflow:1.0.0
+              image: ghcr.io/mlflow/mlflow:1.0.0-full
               imagePullPolicy: IfNotPresent
               name: mlflow-db-migration
               resources:
@@ -1334,7 +1334,7 @@ should match snapshot with additional values when bitnami postgresql is enabled:
                     name: mlflow-env-secret
                 - secretRef:
                     name: mlflow-flask-server-secret-key
-              image: ghcr.io/mlflow/mlflow:1.0.0
+              image: ghcr.io/mlflow/mlflow:1.0.0-full
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 5
@@ -1428,7 +1428,7 @@ should match snapshot with additional values when bitnami postgresql is enabled:
                     name: mlflow-env-secret
                 - secretRef:
                     name: mlflow-flask-server-secret-key
-              image: ghcr.io/mlflow/mlflow:1.0.0
+              image: ghcr.io/mlflow/mlflow:1.0.0-full
               imagePullPolicy: IfNotPresent
               name: mlflow-db-migration
               resources:
@@ -1692,7 +1692,7 @@ should match snapshot with additional values when mssql is enabled:
                     name: mlflow-env-secret
                 - secretRef:
                     name: mlflow-flask-server-secret-key
-              image: ghcr.io/mlflow/mlflow:1.0.0
+              image: ghcr.io/mlflow/mlflow:1.0.0-full
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 5
@@ -1772,7 +1772,7 @@ should match snapshot with additional values when mssql is enabled:
                     name: mlflow-env-secret
                 - secretRef:
                     name: mlflow-flask-server-secret-key
-              image: ghcr.io/mlflow/mlflow:1.0.0
+              image: ghcr.io/mlflow/mlflow:1.0.0-full
               imagePullPolicy: IfNotPresent
               name: mlflow-db-migration
               resources:
@@ -2036,7 +2036,7 @@ should match snapshot with additional values when mysql is enabled:
                     name: mlflow-env-secret
                 - secretRef:
                     name: mlflow-flask-server-secret-key
-              image: ghcr.io/mlflow/mlflow:1.0.0
+              image: ghcr.io/mlflow/mlflow:1.0.0-full
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 5
@@ -2116,7 +2116,7 @@ should match snapshot with additional values when mysql is enabled:
                     name: mlflow-env-secret
                 - secretRef:
                     name: mlflow-flask-server-secret-key
-              image: ghcr.io/mlflow/mlflow:1.0.0
+              image: ghcr.io/mlflow/mlflow:1.0.0-full
               imagePullPolicy: IfNotPresent
               name: mlflow-db-migration
               resources:
@@ -2375,7 +2375,7 @@ should match snapshot with additional values when postgresql is enabled:
                     name: mlflow-env-secret
                 - secretRef:
                     name: mlflow-flask-server-secret-key
-              image: ghcr.io/mlflow/mlflow:1.0.0
+              image: ghcr.io/mlflow/mlflow:1.0.0-full
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 5
@@ -2455,7 +2455,7 @@ should match snapshot with additional values when postgresql is enabled:
                     name: mlflow-env-secret
                 - secretRef:
                     name: mlflow-flask-server-secret-key
-              image: ghcr.io/mlflow/mlflow:1.0.0
+              image: ghcr.io/mlflow/mlflow:1.0.0-full
               imagePullPolicy: IfNotPresent
               name: mlflow-db-migration
               resources:
