@@ -1,0 +1,130 @@
+suite: test image flavor and extra pip packages
+
+templates:
+  - configmap.yaml
+  - deployment.yaml
+
+release:
+  name: mlflow
+  namespace: mlflow
+
+chart:
+  version: 1.0.0
+  appVersion: 1.0.0
+
+tests:
+  - it: should use full flavor by default
+    asserts:
+      - contains:
+          path: spec.template.spec.containers
+          content:
+            name: mlflow
+          any: true
+        template: deployment.yaml
+      - matchRegex:
+          path: spec.template.spec.containers[0].image
+          pattern: "ghcr.io/mlflow/mlflow:1.0.0-full"
+        template: deployment.yaml
+
+  - it: should use light image when flavor is empty
+    set:
+      image.flavor: ""
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: "ghcr.io/mlflow/mlflow:1.0.0"
+        template: deployment.yaml
+
+  - it: should use explicit tag and ignore flavor
+    set:
+      image.tag: "3.10.1-custom"
+      image.flavor: "full"
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: "ghcr.io/mlflow/mlflow:3.10.1-custom"
+        template: deployment.yaml
+
+  - it: should add pip-packages init container when extraPipPackages is set
+    set:
+      extraPipPackages:
+        - boto3
+        - azure-identity
+    asserts:
+      - contains:
+          path: spec.template.spec.initContainers
+          content:
+            name: pip-packages
+          any: true
+        template: deployment.yaml
+
+  - it: should set PYTHONPATH when extraPipPackages is set
+    set:
+      extraPipPackages:
+        - boto3
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: PYTHONPATH
+            value: /mlflow/pip-packages
+        template: deployment.yaml
+
+  - it: should mount pip-packages volume into main container when extraPipPackages is set
+    set:
+      extraPipPackages:
+        - boto3
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: pip-packages
+            mountPath: /mlflow/pip-packages
+        template: deployment.yaml
+
+  - it: should add pip-packages emptyDir volume when extraPipPackages is set
+    set:
+      extraPipPackages:
+        - boto3
+    asserts:
+      - contains:
+          path: spec.template.spec.volumes
+          content:
+            name: pip-packages
+            emptyDir: {}
+        template: deployment.yaml
+
+  - it: should not add pip-packages init container when extraPipPackages is empty
+    asserts:
+      - isNull:
+          path: spec.template.spec.initContainers
+        template: deployment.yaml
+
+  - it: should not set PYTHONPATH when extraPipPackages is empty
+    asserts:
+      - notContains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: PYTHONPATH
+        template: deployment.yaml
+
+  - it: pip-packages init container should use same image as main container
+    set:
+      extraPipPackages:
+        - boto3
+      image.flavor: ""
+    asserts:
+      - equal:
+          path: spec.template.spec.initContainers[0].image
+          value: "ghcr.io/mlflow/mlflow:1.0.0"
+        template: deployment.yaml
+
+  - it: pip-packages init container should respect flavor
+    set:
+      extraPipPackages:
+        - boto3
+    asserts:
+      - equal:
+          path: spec.template.spec.initContainers[0].image
+          value: "ghcr.io/mlflow/mlflow:1.0.0-full"
+        template: deployment.yaml

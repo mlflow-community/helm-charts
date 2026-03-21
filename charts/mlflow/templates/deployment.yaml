@@ -64,9 +64,21 @@ spec:
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-    {{- if or (and (or .Values.backendStore.postgres.enabled .Values.backendStore.mysql.enabled .Values.backendStore.mssql.enabled .Values.postgresql.enabled .Values.mysql.enabled) (or .Values.backendStore.databaseConnectionCheck .Values.backendStore.databaseMigration) ) .Values.auth.enabled .Values.ldapAuth.enabled .Values.initContainers }}
+    {{- if or (and (or .Values.backendStore.postgres.enabled .Values.backendStore.mysql.enabled .Values.backendStore.mssql.enabled .Values.postgresql.enabled .Values.mysql.enabled) (or .Values.backendStore.databaseConnectionCheck .Values.backendStore.databaseMigration) ) .Values.auth.enabled .Values.ldapAuth.enabled .Values.initContainers .Values.extraPipPackages }}
       initContainers:
     {{- end }}
+      {{- if .Values.extraPipPackages }}
+        - name: pip-packages
+          image: "{{ .Values.image.repository }}:{{ include "mlflow.imageTag" . }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - /bin/sh
+            - -c
+            - pip install {{ .Values.extraPipPackages | join " " }} --target /mlflow/pip-packages
+          volumeMounts:
+            - name: pip-packages
+              mountPath: /mlflow/pip-packages
+      {{- end }}
       {{- if and (or .Values.backendStore.postgres.enabled .Values.backendStore.mysql.enabled .Values.backendStore.mssql.enabled .Values.postgresql.enabled .Values.mysql.enabled) .Values.backendStore.databaseConnectionCheck }}
         - name: dbchecker
           image: "{{ .Values.initImages.dbchecker.repository }}:{{ .Values.initImages.dbchecker.tag }}"
@@ -153,7 +165,7 @@ spec:
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          image: "{{ .Values.initImages.mlflowDbMigration.repository }}:{{ .Values.initImages.mlflowDbMigration.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.initImages.mlflowDbMigration.repository }}:{{ include "mlflow.dbMigrationImageTag" . }}"
           imagePullPolicy: {{ .Values.initImages.mlflowDbMigration.pullPolicy }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
@@ -293,7 +305,7 @@ spec:
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ include "mlflow.imageTag" . }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["mlflow"]
           args:
@@ -448,6 +460,10 @@ spec:
                   key: {{ .Values.artifactRoot.s3.existingSecret.keyOfSecretAccessKey }}
             {{- end }}
           {{- end }}
+          {{- if .Values.extraPipPackages }}
+            - name: PYTHONPATH
+              value: /mlflow/pip-packages
+          {{- end }}
           {{- range $key, $value := .Values.extraEnvVars }}
             - name: {{ upper $key }}
               value: {{ $value | quote }}
@@ -463,8 +479,12 @@ spec:
             - secretRef:
                 name: {{ . }}
           {{- end }}
-          {{- if or .Values.extraVolumeMounts .Values.auth.enabled .Values.ldapAuth.enabled }}
+          {{- if or .Values.extraVolumeMounts .Values.auth.enabled .Values.ldapAuth.enabled .Values.extraPipPackages }}
           volumeMounts:
+            {{- if .Values.extraPipPackages }}
+            - name: pip-packages
+              mountPath: /mlflow/pip-packages
+            {{- end }}
             {{- if .Values.auth.enabled }}
             - name: ini-file
               mountPath: {{ printf "%s/%s" (.Values.auth.configPath | trimSuffix "/") (default "basic_auth.ini" (.Values.auth.configFile | trimPrefix "/")) }}
@@ -501,8 +521,12 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if or (and (or .Values.backendStore.postgres.enabled .Values.backendStore.mysql.enabled .Values.backendStore.mssql.enabled .Values.postgresql.enabled .Values.mysql.enabled) (or .Values.backendStore.databaseConnectionCheck .Values.backendStore.databaseMigration) ) .Values.extraVolumes .Values.auth.enabled .Values.ldapAuth.enabled }}
+      {{- if or (and (or .Values.backendStore.postgres.enabled .Values.backendStore.mysql.enabled .Values.backendStore.mssql.enabled .Values.postgresql.enabled .Values.mysql.enabled) (or .Values.backendStore.databaseConnectionCheck .Values.backendStore.databaseMigration) ) .Values.extraVolumes .Values.auth.enabled .Values.ldapAuth.enabled .Values.extraPipPackages }}
       volumes:
+        {{- if .Values.extraPipPackages }}
+        - name: pip-packages
+          emptyDir: {}
+        {{- end }}
         {{- if and (or .Values.backendStore.postgres.enabled .Values.backendStore.mysql.enabled .Values.backendStore.mssql.enabled .Values.postgresql.enabled .Values.mysql.enabled) .Values.backendStore.databaseConnectionCheck }}
         - name: dbchecker
           configMap:

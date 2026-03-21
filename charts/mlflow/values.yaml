@@ -12,8 +12,12 @@ image:
   repository: ghcr.io/mlflow/mlflow
   # -- The docker image pull policy
   pullPolicy: IfNotPresent
-  # -- The docker image tag to use. Default app version
+  # -- The docker image tag to use. Overrides appVersion and flavor when set.
   tag: ""
+  # -- Image flavor to append to the tag when image.tag is not set.
+  # Use "full" (default) for the image that includes extra ML framework dependencies.
+  # Use "" (empty string) for the minimal image.
+  flavor: "full"
 
 # -- mlflow init images
 initImages:
@@ -451,6 +455,20 @@ extraFlags: []
   # serveArtifacts
 # If specified, configures the mlflow server to be used only for proxied artifact serving.
   # artifactsOnly
+
+# -- Extra pip packages to install at startup via an init container.
+# Creates an init container that installs the listed packages into /mlflow/pip-packages
+# and makes them available to MLflow by setting PYTHONPATH automatically.
+# Useful for cloud storage drivers and auth plugins without building a custom image.
+#
+# Examples:
+#   AWS S3:         ["boto3"]
+#   Azure Blob:     ["azure-identity", "azure-storage-blob"]
+#   GCS:            ["google-cloud-storage"]
+#   Basic auth:     ["mlflow[auth]"]
+#   OIDC auth:      ["mlflow-oidc-auth"]
+#   Prometheus:     ["prometheus-flask-exporter"]
+extraPipPackages: []
 
 # -- Extra environment variables
 extraEnvVars: {}

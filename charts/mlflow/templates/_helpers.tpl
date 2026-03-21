@@ -95,3 +95,33 @@ Create mysql name secret name.
 {{- define "mlflow.mysql.fullname" -}}
 {{- printf "%s-mysql" (include "mlflow.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+
+{{/*
+Compute the MLflow image tag, respecting image.tag override and image.flavor.
+- If image.tag is set explicitly, use it as-is.
+- Else if image.flavor is set, append it: "<appVersion>-<flavor>" (e.g. "3.10.1-full").
+- Else fall back to .Chart.AppVersion.
+*/}}
+{{- define "mlflow.imageTag" -}}
+{{- if .Values.image.tag -}}
+{{- .Values.image.tag -}}
+{{- else if .Values.image.flavor -}}
+{{- printf "%s-%s" .Chart.AppVersion .Values.image.flavor -}}
+{{- else -}}
+{{- .Chart.AppVersion -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Compute the db-migration init container image tag.
+Follows the same flavor logic as the main image so both stay in sync.
+*/}}
+{{- define "mlflow.dbMigrationImageTag" -}}
+{{- if .Values.initImages.mlflowDbMigration.tag -}}
+{{- .Values.initImages.mlflowDbMigration.tag -}}
+{{- else if .Values.image.flavor -}}
+{{- printf "%s-%s" .Chart.AppVersion .Values.image.flavor -}}
+{{- else -}}
+{{- .Chart.AppVersion -}}
+{{- end -}}
+{{- end -}}
