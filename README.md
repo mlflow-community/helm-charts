@@ -2,6 +2,8 @@
 
 Community-maintained Helm charts for [MLflow](https://mlflow.org/).
 
+Forked from [community-charts/helm-charts](https://github.com/community-charts/helm-charts) to apply the fix for the official MLflow image and ensure continued maintenance. This chart uses the **official `ghcr.io/mlflow/mlflow` image** published by the MLflow project.
+
 ## Add the Helm repository
 
 ```bash
@@ -51,7 +53,7 @@ To pin an exact tag (overrides `flavor`):
 
 ```yaml
 image:
-  tag: "3.10.1-full"
+  tag: "v3.10.1-full"
 ```
 
 ---
@@ -138,9 +140,9 @@ extraPipPackages:
 
 ---
 
-## Gunicorn vs uvicorn
+## Logging
 
-The official MLflow image ships with gunicorn as the default server. Some Kubernetes environments encounter permission errors with gunicorn. To switch to uvicorn:
+MLflow 3.x uses uvicorn as the default server. The chart injects `--uvicorn-opts=--log-level=<level>` automatically when `log.enabled: true`. To disable log-level injection:
 
 ```yaml
 log:
