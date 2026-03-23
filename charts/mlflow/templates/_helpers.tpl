@@ -114,11 +114,17 @@ Compute the MLflow image tag, respecting image.tag override and image.flavor.
 
 {{/*
 Compute the db-migration init container image tag.
-Follows the same flavor logic as the main image so both stay in sync.
+Uses the same logic as mlflow.imageTag so both containers always stay in sync.
+- If initImages.mlflowDbMigration.tag is set explicitly, use it.
+- Else if image.tag is set, use it (keeps init container in sync with main container).
+- Else if image.flavor is set, append it: "<appVersion>-<flavor>".
+- Else fall back to .Chart.AppVersion.
 */}}
 {{- define "mlflow.dbMigrationImageTag" -}}
 {{- if .Values.initImages.mlflowDbMigration.tag -}}
 {{- .Values.initImages.mlflowDbMigration.tag -}}
+{{- else if .Values.image.tag -}}
+{{- .Values.image.tag -}}
 {{- else if .Values.image.flavor -}}
 {{- printf "%s-%s" .Chart.AppVersion .Values.image.flavor -}}
 {{- else -}}

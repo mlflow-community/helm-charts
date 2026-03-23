@@ -83,6 +83,37 @@ data:
     database = os.getenv("MSSQL_DATABASE")
     engine = utils.create_sqlalchemy_engine_with_retry(f"mssql{{ $dbConnectionDriver }}://{username}:{password}@{host}:{port}/{database}")
   {{- end }}
+
+    # Handle unknown alembic revisions from unofficial MLflow builds (e.g. burakince/mlflow).
+    # If the DB contains a revision not in the official migration chain, replace it with the
+    # official head so that _initialize_tables can run the delta migrations cleanly.
+    try:
+        from alembic.config import Config
+        from alembic.script import ScriptDirectory
+        from sqlalchemy import text
+        import mlflow.store.db_migrations
+
+        alembic_cfg = Config()
+        alembic_cfg.set_main_option("script_location", os.path.dirname(mlflow.store.db_migrations.__file__))
+        script_dir = ScriptDirectory.from_config(alembic_cfg)
+        known_revisions = {r.revision for r in script_dir.walk_revisions()}
+        official_head = script_dir.get_heads()[0]
+
+        with engine.connect() as conn:
+            try:
+                result = conn.execute(text("SELECT version_num FROM alembic_version"))
+                current = {r[0] for r in result.fetchall()}
+            except Exception:
+                current = set()
+            unknown = current - known_revisions
+            if unknown:
+                print(f"Found unknown alembic revisions: {unknown}. Replacing with official head: {official_head}")
+                conn.execute(text("DELETE FROM alembic_version"))
+                conn.execute(text("INSERT INTO alembic_version (version_num) VALUES (:rev)"), {"rev": official_head})
+                conn.commit()
+    except Exception as e:
+        print(f"Warning during alembic revision check: {e}")
+
     utils._initialize_tables(engine)
 {{- end }}
 {{- if and (or .Values.backendStore.postgres.enabled .Values.backendStore.mysql.enabled .Values.backendStore.mssql.enabled .Values.postgresql.enabled .Values.mysql.enabled) .Values.backendStore.databaseConnectionCheck }}
