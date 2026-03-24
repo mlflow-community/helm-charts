@@ -114,7 +114,41 @@ data:
     except Exception as e:
         print(f"Warning during alembic revision check: {e}")
 
-    utils._initialize_tables(engine)
+    # Run migrations, retrying past "already exists" errors caused by schemas that are
+    # ahead of the tracked revision (e.g. after migrating from burakince/mlflow).
+    import sqlalchemy.exc
+    for _attempt in range(20):
+        try:
+            utils._initialize_tables(engine)
+            break
+        except sqlalchemy.exc.ProgrammingError as e:
+            if "already exists" not in str(e):
+                raise
+            try:
+                from alembic.config import Config
+                from alembic.runtime.migration import MigrationContext
+                from alembic.script import ScriptDirectory
+                from alembic import command
+                import mlflow.store.db_migrations
+
+                alembic_cfg = Config()
+                alembic_cfg.set_main_option("script_location", os.path.dirname(mlflow.store.db_migrations.__file__))
+                alembic_cfg.set_main_option("sqlalchemy.url", str(engine.url))
+                script_dir = ScriptDirectory.from_config(alembic_cfg)
+
+                with engine.connect() as conn:
+                    ctx = MigrationContext.configure(conn)
+                    heads = ctx.get_current_heads()
+
+                for rev in script_dir.walk_revisions():
+                    downs = rev.down_revision if isinstance(rev.down_revision, tuple) else (rev.down_revision,)
+                    if set(filter(None, downs)) & set(heads):
+                        print(f"Schema ahead of revision {rev.revision}, stamping past it and retrying.")
+                        command.stamp(alembic_cfg, rev.revision)
+                        break
+            except Exception as stamp_err:
+                print(f"Warning: could not advance past migration: {stamp_err}")
+                break
 {{- end }}
 {{- if and (or .Values.backendStore.postgres.enabled .Values.backendStore.mysql.enabled .Values.backendStore.mssql.enabled .Values.postgresql.enabled .Values.mysql.enabled) .Values.backendStore.databaseConnectionCheck }}
 ---
