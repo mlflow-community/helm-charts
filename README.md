@@ -151,6 +151,20 @@ log:
 
 ---
 
+## Development
+
+### Preview docs locally
+
+```bash
+uv venv && uv pip install -e .
+.venv/bin/python .github/scripts/render_docs.py
+open dist/index.html
+```
+
+## TODO
+
+- [ ] Register on [Artifact Hub](https://artifacthub.io) to list the chart publicly
+
 ## Attribution
 
 This chart is based on the work from [community-charts/helm-charts](https://github.com/community-charts/helm-charts), licensed under MIT.

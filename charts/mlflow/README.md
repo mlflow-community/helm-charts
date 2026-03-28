@@ -2,18 +2,14 @@
 
 ![mlflow](https://raw.githubusercontent.com/mlflow/mlflow/refs/heads/master/docs/static/images/logo-light.svg)
 
-A Helm chart for Mlflow open source platform for the machine learning lifecycle
+Helm chart for MLflow — open source platform for the machine learning lifecycle, using the official ghcr.io/mlflow/mlflow image
 
-![Version: 1.8.1](https://img.shields.io/badge/Version-1.8.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.7.0](https://img.shields.io/badge/AppVersion-3.7.0-informational?style=flat-square)
-
-## Official Documentation
-
-For detailed usage instructions, configuration options, and additional information about the `mlflow` Helm chart, refer to the [official documentation](https://community-charts.github.io/docs/charts/mlflow/usage).
+![Version: 1.9.1](https://img.shields.io/badge/Version-1.9.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.10.1](https://img.shields.io/badge/AppVersion-3.10.1-informational?style=flat-square)
 
 ## Get Helm Repository Info
 
 ```console
-helm repo add community-charts https://community-charts.github.io/helm-charts
+helm repo add mlflow-community https://mlflow-community.github.io/helm-charts
 helm repo update
 ```
 
@@ -22,14 +18,14 @@ _See [`helm repo`](https://helm.sh/docs/helm/helm_repo/) for command documentati
 ## Installing the Chart
 
 ```console
-helm install [RELEASE_NAME] community-charts/mlflow
+helm install [RELEASE_NAME] mlflow-community/mlflow
 ```
 
 _See [configuration](#configuration) below._
 
 _See [helm install](https://helm.sh/docs/helm/helm_install/) for command documentation._
 
-> **Tip**: Search all available chart versions using `helm search repo community-charts -l`. Please don't forget to run `helm repo update` before the command.
+> **Tip**: Search all available chart versions using `helm search repo mlflow-community -l`. Please don't forget to run `helm repo update` before the command.
 
 ## Supported Databases
 
@@ -184,7 +180,7 @@ You can use 2 different way to connect your S3 backend.
 ## S3 (Minio) and PostgreSQL DB Configuration on Helm Upgrade Command Example
 
 ```console
-helm upgrade --install mlflow community-charts/mlflow \
+helm upgrade --install mlflow mlflow-community/mlflow \
   --set backendStore.databaseMigration=true \
   --set backendStore.postgres.enabled=true \
   --set backendStore.postgres.host=postgres-service \
@@ -203,7 +199,7 @@ helm upgrade --install mlflow community-charts/mlflow \
 ## S3 (Minio) and MySQL DB Configuration on Helm Upgrade Command Example
 
 ```console
-helm upgrade --install mlflow community-charts/mlflow \
+helm upgrade --install mlflow mlflow-community/mlflow \
   --set backendStore.databaseMigration=true \
   --set backendStore.mysql.enabled=true \
   --set backendStore.mysql.host=mysql-service \
@@ -602,7 +598,7 @@ _See [helm uninstall](https://helm.sh/docs/helm/helm_uninstall/) for command doc
 ## Upgrading Chart
 
 ```console
-helm upgrade [RELEASE_NAME] community-charts/mlflow
+helm upgrade [RELEASE_NAME] mlflow-community/mlflow
 ```
 
 ## Values
@@ -796,8 +792,7 @@ helm upgrade [RELEASE_NAME] community-charts/mlflow
 
 ## Source Code
 
-* <https://github.com/community-charts/helm-charts>
-* <https://github.com/burakince/mlflow>
+* <https://github.com/mlflow-community/helm-charts>
 * <https://github.com/mlflow/mlflow>
 
 ## Chart Development
@@ -810,6 +805,4 @@ helm unittest --strict --file 'unittests/**/*.yaml' charts/mlflow
 
 ## Maintainers
 
-| Name | Email | Url |
-| ---- | ------ | --- |
-| burakince | <burak.ince@linux.org.tr> | <https://www.burakince.com> |
+This chart is maintained by the [mlflow-community](https://github.com/mlflow-community) GitHub organization.

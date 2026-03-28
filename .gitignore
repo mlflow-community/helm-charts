@@ -9,3 +9,8 @@ charts/*/charts/
 
 # Claude Code personal settings
 .claude/settings.local.json
+
+# Python
+.venv/
+dist/
+*.egg-info/
