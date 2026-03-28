@@ -29,10 +29,10 @@ jobs:
         uses: astral-sh/setup-uv@v5
 
       - name: Install dependencies
-        run: uv pip install -e .
+        run: uv venv && uv pip install -e .
 
       - name: Generate index.html
-        run: python .github/scripts/render_docs.py
+        run: .venv/bin/python .github/scripts/render_docs.py
 
       - name: Publish to gh-pages
         uses: peaceiris/actions-gh-pages@v4
