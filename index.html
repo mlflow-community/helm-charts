@@ -1,1 +1,1839 @@
-Helm chart repository
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mlflow Helm Chart — MLflow Community</title>
+  <meta name="description" content="Helm chart for MLflow — open source platform for the machine learning lifecycle, using the official ghcr.io/mlflow/mlflow image" />
+  <link rel="icon" href="https://raw.githubusercontent.com/mlflow/mlflow/master/assets/logo.svg" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --accent: #58a6ff;
+      --accent-hover: #79c0ff;
+      --green: #3fb950;
+      --code-bg: #1f2428;
+      --inline-code-bg: #1f2428;
+      --radius: 6px;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    header img { height: 36px; }
+    header .meta { display: flex; flex-direction: column; }
+    header .meta strong { font-size: 1.1rem; color: var(--text); }
+    header .meta span { font-size: 0.85rem; color: var(--muted); }
+
+    .badges {
+      margin-left: auto;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 2px 10px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .badge .label { color: var(--muted); }
+    .badge .value { color: var(--green); font-weight: 600; }
+
+    .layout {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+
+    .install-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 32px;
+    }
+    .install-card h2 {
+      margin: 0 0 12px;
+      font-size: 1rem;
+      color: var(--muted);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .install-card pre {
+      margin: 0;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      overflow-x: auto;
+      font-size: 0.9rem;
+    }
+
+    .content h1, .content h2, .content h3,
+    .content h4, .content h5, .content h6 {
+      color: var(--text);
+      margin-top: 1.8em;
+      margin-bottom: 0.5em;
+      padding-bottom: 0.3em;
+    }
+    .content h1 { display: none; }  /* already in header */
+    .content h2 { font-size: 1.35rem; border-bottom: 1px solid var(--border); }
+    .content h3 { font-size: 1.1rem; }
+
+    .content a { color: var(--accent); text-decoration: none; }
+    .content a:hover { color: var(--accent-hover); text-decoration: underline; }
+
+    .content p { margin: 0.6em 0 1em; }
+
+    .content code {
+      background: var(--inline-code-bg);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 2px 5px;
+      font-size: 0.87em;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    }
+
+    .content pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      overflow-x: auto;
+      line-height: 1.5;
+    }
+    .content pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 0.88rem;
+    }
+
+    .content table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 1em 0;
+      font-size: 0.9rem;
+      overflow-x: auto;
+      display: block;
+    }
+    .content th, .content td {
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      text-align: left;
+    }
+    .content th {
+      background: var(--surface);
+      color: var(--text);
+      font-weight: 600;
+    }
+    .content tr:nth-child(even) td { background: #0d1117; }
+
+    .content blockquote {
+      border-left: 4px solid var(--accent);
+      margin: 1em 0;
+      padding: 4px 16px;
+      color: var(--muted);
+    }
+
+    .content hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2em 0;
+    }
+
+    .content img { max-width: 100%; }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+
+    @media (max-width: 600px) {
+      header { flex-wrap: wrap; }
+      .badges { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://raw.githubusercontent.com/mlflow/mlflow/master/assets/logo.svg" alt="MLflow logo" />
+    <div class="meta">
+      <strong>mlflow</strong>
+      <span>MLflow Community Helm Chart</span>
+    </div>
+    <div class="badges">
+      <span class="badge"><span class="label">chart</span><span class="value">v1.9.2</span></span>
+      <span class="badge"><span class="label">app</span><span class="value">v3.10.1</span></span>
+      <a href="https://artifacthub.io/packages/helm/mlflow-community/mlflow" target="_blank">
+        <img src="https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/mlflow-community" alt="Artifact Hub" style="height:20px;border-radius:4px;" />
+      </a>
+    </div>
+  </header>
+
+  <div class="layout">
+    <div class="install-card">
+      <h2>Install</h2>
+      <pre><code>helm repo add mlflow-community https://mlflow-community.github.io/helm-charts
+helm repo update
+helm install mlflow mlflow-community/mlflow</code></pre>
+    </div>
+
+    <div class="content">
+      <h1 id="mlflow">mlflow</h1>
+<p><img alt="mlflow" src="https://raw.githubusercontent.com/mlflow/mlflow/refs/heads/master/docs/static/images/logo-light.svg" /></p>
+<p>Helm chart for MLflow — open source platform for the machine learning lifecycle, using the official ghcr.io/mlflow/mlflow image</p>
+<p><img alt="Version: 1.9.1" src="https://img.shields.io/badge/Version-1.9.1-informational?style=flat-square" /> <img alt="Type: application" src="https://img.shields.io/badge/Type-application-informational?style=flat-square" /> <img alt="AppVersion: 3.10.1" src="https://img.shields.io/badge/AppVersion-3.10.1-informational?style=flat-square" /></p>
+<h2 id="get-helm-repository-info">Get Helm Repository Info</h2>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #717171">helm repo add mlflow-community https://mlflow-community.github.io/helm-charts</span>
+<span style="color: #717171">helm repo update</span>
+</code></pre></div>
+<p><em>See <a href="https://helm.sh/docs/helm/helm_repo/"><code>helm repo</code></a> for command documentation.</em></p>
+<h2 id="installing-the-chart">Installing the Chart</h2>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #717171">helm install [RELEASE_NAME] mlflow-community/mlflow</span>
+</code></pre></div>
+<p><em>See <a href="#configuration">configuration</a> below.</em></p>
+<p><em>See <a href="https://helm.sh/docs/helm/helm_install/">helm install</a> for command documentation.</em></p>
+<blockquote>
+<p><strong>Tip</strong>: Search all available chart versions using <code>helm search repo mlflow-community -l</code>. Please don't forget to run <code>helm repo update</code> before the command.</p>
+</blockquote>
+<h2 id="supported-databases">Supported Databases</h2>
+<p>Currently, we support the following two databases as a backend repository for Mlflow.</p>
+<ul>
+<li><a href="https://www.postgresql.org/">PostgreSQL</a></li>
+<li><a href="https://www.mysql.com/">MySQL</a></li>
+</ul>
+<h2 id="supported-cloud-providers">Supported Cloud Providers</h2>
+<p>We currently support the following three cloud providers for <a href="https://de.wikipedia.org/wiki/Binary_Large_Object">BLOB</a> storage integration.</p>
+<ul>
+<li><a href="https://aws.amazon.com/s3/">AWS (S3)</a></li>
+<li><a href="https://cloud.google.com/storage">Google Cloud Platform (Cloud Storage)</a></li>
+<li><a href="https://azure.microsoft.com/en-us/services/storage/blobs/">Azure Cloud (Azure Blob Storage)</a></li>
+</ul>
+<h2 id="values-files-examples">Values Files Examples</h2>
+<h2 id="postgres-database-migration-values-files-example">Postgres Database Migration Values Files Example</h2>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000; font-weight: bold">backendStore</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">databaseMigration</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">postgres</span>:
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">host</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;postgresql-instance1.cg034hpkmmjt.eu-central-1.rds.amazonaws.com&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">port</span>:<span style="color: #BBB"> </span>5432
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">database</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;mlflow&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">user</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;mlflowuser&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">password</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;Pa33w0rd!&quot;</span>
+</code></pre></div>
+<h2 id="postgres-database-with-existing-database-secret-example">Postgres Database with Existing Database Secret Example</h2>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000; font-weight: bold">backendStore</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">postgres</span>:
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">host</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;postgresql-instance1.cg034hpkmmjt.eu-central-1.rds.amazonaws.com&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">port</span>:<span style="color: #BBB"> </span>5432
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">database</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;mlflow&quot;</span>
+
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">existingDatabaseSecret</span>:
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">name</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;postgres-database-secret&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">usernameKey</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;username&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">passwordKey</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;password&quot;</span>
+</code></pre></div>
+<h2 id="bitnamis-postgres-database-migration-values-files-example">Bitnami's Postgres Database Migration Values Files Example</h2>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000; font-weight: bold">backendStore</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">databaseMigration</span>:<span style="color: #BBB"> </span>true
+<span style="color: #008000; font-weight: bold">postgres</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+</code></pre></div>
+<h2 id="mysql-database-migration-values-files-example">MySQL Database Migration Values Files Example</h2>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000; font-weight: bold">backendStore</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">databaseMigration</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">mysql</span>:
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">host</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;mysql-instance1.cg034hpkmmjt.eu-central-1.rds.amazonaws.com&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">port</span>:<span style="color: #BBB"> </span>3306
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">database</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;mlflow&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">user</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;mlflowuser&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">password</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;Pa33w0rd!&quot;</span>
+</code></pre></div>
+<h2 id="mysql-database-with-existing-database-secret-example">MySQL Database with Existing Database Secret Example</h2>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000; font-weight: bold">backendStore</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">mysql</span>:
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">host</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;mysql-instance1.cg034hpkmmjt.eu-central-1.rds.amazonaws.com&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">port</span>:<span style="color: #BBB"> </span>3306
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">database</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;mlflow&quot;</span>
+
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">existingDatabaseSecret</span>:
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">name</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;mysql-database-secret&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">usernameKey</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;username&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">passwordKey</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;password&quot;</span>
+</code></pre></div>
+<h2 id="bitnamis-mysql-database-migration-values-files-example">Bitnami's MySQL Database Migration Values Files Example</h2>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000; font-weight: bold">backendStore</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">databaseMigration</span>:<span style="color: #BBB"> </span>true
+<span style="color: #008000; font-weight: bold">mysql</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+</code></pre></div>
+<h2 id="postgres-database-connection-check-values-files-example">Postgres Database Connection Check Values Files Example</h2>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000; font-weight: bold">backendStore</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">databaseConnectionCheck</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">postgres</span>:
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">host</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;postgresql-instance1.cg034hpkmmjt.eu-central-1.rds.amazonaws.com&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">port</span>:<span style="color: #BBB"> </span>5432
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">database</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;mlflow&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">user</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;mlflowuser&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">password</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;Pa33w0rd!&quot;</span>
+</code></pre></div>
+<h2 id="bitnamis-postgres-database-connection-check-values-files-example">Bitnami's Postgres Database Connection Check Values Files Example</h2>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000; font-weight: bold">backendStore</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">databaseConnectionCheck</span>:<span style="color: #BBB"> </span>true
+<span style="color: #008000; font-weight: bold">postgres</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+</code></pre></div>
+<h2 id="mysql-database-connection-check-values-files-example">MySQL Database Connection Check Values Files Example</h2>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000; font-weight: bold">backendStore</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">databaseConnectionCheck</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">mysql</span>:
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">host</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;mysql-instance1.cg034hpkmmjt.eu-central-1.rds.amazonaws.com&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">port</span>:<span style="color: #BBB"> </span>3306
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">database</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;mlflow&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">user</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;mlflowuser&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">password</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;Pa33w0rd!&quot;</span>
+</code></pre></div>
+<h2 id="bitnamis-mysql-database-connection-check-values-files-example">Bitnami's MySQL Database Connection Check Values Files Example</h2>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000; font-weight: bold">backendStore</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">databaseConnectionCheck</span>:<span style="color: #BBB"> </span>true
+<span style="color: #008000; font-weight: bold">mysql</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+</code></pre></div>
+<h2 id="aws-installation-examples">AWS Installation Examples</h2>
+<p>You can use 2 different way to connect your S3 backend.</p>
+<ul>
+<li>First way, you can access to your S3 with IAM user's awsAccessKeyId and awsSecretAccessKey.</li>
+<li>Second way, you can create an aws role for your service account. And you can assign your role ARN from serviceAccount annotation. You don't need to create or manage IAM user anymore. Please find more information from <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-idp_oidc.html">here</a>.</li>
+</ul>
+<blockquote>
+<p><strong>Tip</strong>: Please follow <a href="https://aws.amazon.com/getting-started/hands-on/create-connect-postgresql-db/">this tutorial</a> to create your own RDS postgres cluster.</p>
+</blockquote>
+<h2 id="s3-minio-and-postgresql-db-configuration-on-helm-upgrade-command-example">S3 (Minio) and PostgreSQL DB Configuration on Helm Upgrade Command Example</h2>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #717171">helm upgrade --install mlflow mlflow-community/mlflow \</span>
+<span style="color: #717171">  --set backendStore.databaseMigration=true \</span>
+<span style="color: #717171">  --set backendStore.postgres.enabled=true \</span>
+<span style="color: #717171">  --set backendStore.postgres.host=postgres-service \</span>
+<span style="color: #717171">  --set backendStore.postgres.port=5432 \</span>
+<span style="color: #717171">  --set backendStore.postgres.database=postgres \</span>
+<span style="color: #717171">  --set backendStore.postgres.user=postgres \</span>
+<span style="color: #717171">  --set backendStore.postgres.password=postgres \</span>
+<span style="color: #717171">  --set artifactRoot.s3.enabled=true \</span>
+<span style="color: #717171">  --set artifactRoot.s3.bucket=mlflow \</span>
+<span style="color: #717171">  --set artifactRoot.s3.awsAccessKeyId=minioadmin \</span>
+<span style="color: #717171">  --set artifactRoot.s3.awsSecretAccessKey=minioadmin \</span>
+<span style="color: #717171">  --set extraEnvVars.MLFLOW_S3_ENDPOINT_URL=http://minio-service:9000 \</span>
+<span style="color: #717171">  --set serviceMonitor.enabled=true</span>
+</code></pre></div>
+<h2 id="s3-minio-and-mysql-db-configuration-on-helm-upgrade-command-example">S3 (Minio) and MySQL DB Configuration on Helm Upgrade Command Example</h2>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #717171">helm upgrade --install mlflow mlflow-community/mlflow \</span>
+<span style="color: #717171">  --set backendStore.databaseMigration=true \</span>
+<span style="color: #717171">  --set backendStore.mysql.enabled=true \</span>
+<span style="color: #717171">  --set backendStore.mysql.host=mysql-service \</span>
+<span style="color: #717171">  --set backendStore.mysql.port=3306 \</span>
+<span style="color: #717171">  --set backendStore.mysql.database=mlflow \</span>
+<span style="color: #717171">  --set backendStore.mysql.user=mlflow \</span>
+<span style="color: #717171">  --set backendStore.mysql.password=mlflow \</span>
+<span style="color: #717171">  --set artifactRoot.s3.enabled=true \</span>
+<span style="color: #717171">  --set artifactRoot.s3.bucket=mlflow \</span>
+<span style="color: #717171">  --set artifactRoot.s3.awsAccessKeyId=minioadmin \</span>
+<span style="color: #717171">  --set artifactRoot.s3.awsSecretAccessKey=minioadmin \</span>
+<span style="color: #717171">  --set extraEnvVars.MLFLOW_S3_ENDPOINT_URL=http://minio-service:9000 \</span>
+<span style="color: #717171">  --set serviceMonitor.enabled=true</span>
+</code></pre></div>
+<h2 id="s3-access-with-awsaccesskeyid-and-awssecretaccesskey-values-files-example">S3 Access with awsAccessKeyId and awsSecretAccessKey Values Files Example</h2>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000; font-weight: bold">backendStore</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">postgres</span>:
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">host</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;postgresql-instance1.cg034hpkmmjt.eu-central-1.rds.amazonaws.com&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">port</span>:<span style="color: #BBB"> </span>5432
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">database</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;mlflow&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">user</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;mlflowuser&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">password</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;Pa33w0rd!&quot;</span>
+
+<span style="color: #008000; font-weight: bold">artifactRoot</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">s3</span>:
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">bucket</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;my-mlflow-artifact-root-backend&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">awsAccessKeyId</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;a1b2c3d4&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">awsSecretAccessKey</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;a1b2c3d4&quot;</span>
+</code></pre></div>
+<h2 id="s3-access-with-aws-eks-role-arn-values-files-example">S3 Access with AWS EKS Role ARN Values Files Example</h2>
+<blockquote>
+<p><strong>Tip</strong>: <a href="https://docs.aws.amazon.com/eks/latest/userguide/specify-service-account-role.html">Associate an IAM role to a service account</a></p>
+</blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000; font-weight: bold">serviceAccount</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">create</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">annotations</span>:
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">eks.amazonaws.com/role-arn</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;arn:aws:iam::account-id:role/iam-role-name&quot;</span>
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">name</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;mlflow&quot;</span>
+
+<span style="color: #008000; font-weight: bold">backendStore</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">postgres</span>:
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">host</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;postgresql-instance1.cg034hpkmmjt.eu-central-1.rds.amazonaws.com&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">port</span>:<span style="color: #BBB"> </span>5432
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">database</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;mlflow&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">user</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;mlflowuser&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">password</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;Pa33w0rd!&quot;</span>
+
+<span style="color: #008000; font-weight: bold">artifactRoot</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">s3</span>:
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">bucket</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;my-mlflow-artifact-root-backend&quot;</span>
+</code></pre></div>
+<h2 id="azure-cloud-installation-example">Azure Cloud Installation Example</h2>
+<blockquote>
+<p><strong>Tip</strong>: Please follow <a href="https://docs.microsoft.com/en-us/azure/postgresql/tutorial-design-database-using-azure-portal">this tutorial</a> to create your own postgres database.
+<strong>Tip</strong>: Please follow <a href="https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blobs-introduction">this tutorial</a> to create your azure blob storage and container.</p>
+</blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000; font-weight: bold">backendStore</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">postgres</span>:
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">host</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;mydemoserver.postgres.database.azure.com&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">port</span>:<span style="color: #BBB"> </span>5432
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">database</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;mlflow&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">user</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;mlflowuser&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">password</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;Pa33w0rd!&quot;</span>
+
+<span style="color: #008000; font-weight: bold">artifactRoot</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">azureBlob</span>:
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">container</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;mlflow&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">storageAccount</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;mystorageaccount&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">accessKey</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==&quot;</span>
+</code></pre></div>
+<h2 id="pvc-mount-with-sqlite-and-file-based-artifactory-example">PVC Mount with Sqlite and File Based Artifactory Example</h2>
+<h3 id="prerequisites">Prerequisites</h3>
+<p>Please create your PVC before the installation of your helm chart. You can use something similar as the following yaml file.</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000; font-weight: bold">apiVersion</span>:<span style="color: #BBB"> </span>v1
+<span style="color: #008000; font-weight: bold">kind</span>:<span style="color: #BBB"> </span>PersistentVolumeClaim
+<span style="color: #008000; font-weight: bold">metadata</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">name</span>:<span style="color: #BBB"> </span>mlflow-pvc
+<span style="color: #008000; font-weight: bold">spec</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">accessModes</span>:
+<span style="color: #BBB">    </span>-<span style="color: #BBB"> </span>ReadWriteOnce
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">resources</span>:
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">requests</span>:
+<span style="color: #BBB">      </span><span style="color: #008000; font-weight: bold">storage</span>:<span style="color: #BBB"> </span>5Gi
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">storageClassName</span>:<span style="color: #BBB"> </span>standard
+</code></pre></div>
+<p>You need to create the PVC under same namespace as your mlflow helm chart.</p>
+<h3 id="example-chart-parameters">Example Chart Parameters</h3>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000; font-weight: bold">strategy</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">type</span>:<span style="color: #BBB"> </span>Recreate
+
+<span style="color: #008000; font-weight: bold">extraVolumes</span>:
+<span style="color: #BBB">  </span>-<span style="color: #BBB"> </span><span style="color: #008000; font-weight: bold">name</span>:<span style="color: #BBB"> </span>mlflow-volume
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">persistentVolumeClaim</span>:
+<span style="color: #BBB">      </span><span style="color: #008000; font-weight: bold">claimName</span>:<span style="color: #BBB"> </span>mlflow-pvc
+
+<span style="color: #008000; font-weight: bold">extraVolumeMounts</span>:
+<span style="color: #BBB">  </span>-<span style="color: #BBB"> </span><span style="color: #008000; font-weight: bold">name</span>:<span style="color: #BBB"> </span>mlflow-volume
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">mountPath</span>:<span style="color: #BBB"> </span>/mlflow/data
+
+<span style="color: #008000; font-weight: bold">backendStore</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">defaultSqlitePath</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;/mlflow/data/mlflow.db&quot;</span>
+
+<span style="color: #008000; font-weight: bold">artifactRoot</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">proxiedArtifactStorage</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">defaultArtifactsDestination</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;/mlflow/data/mlartifacts&quot;</span>
+
+<span style="color: #008000; font-weight: bold">ingress</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">hosts</span>:
+<span style="color: #BBB">    </span>-<span style="color: #BBB"> </span><span style="color: #008000; font-weight: bold">host</span>:<span style="color: #BBB"> </span>my-mlflow-server-domain-name.com
+<span style="color: #BBB">      </span><span style="color: #008000; font-weight: bold">paths</span>:
+<span style="color: #BBB">        </span>-<span style="color: #BBB"> </span><span style="color: #008000; font-weight: bold">path</span>:<span style="color: #BBB"> </span>/
+<span style="color: #BBB">          </span><span style="color: #008000; font-weight: bold">pathType</span>:<span style="color: #BBB"> </span>ImplementationSpecific
+</code></pre></div>
+<h2 id="authentication-example">Authentication Example</h2>
+<blockquote>
+<p><strong>Tip</strong>: auth and ldapAuth can not be enabled at same time!</p>
+</blockquote>
+<h3 id="authentication-with-plain-admin-settings-example">Authentication with Plain Admin Settings Example</h3>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000; font-weight: bold">auth</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">adminUsername</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;admin&quot;</span>
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">adminPassword</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;S3cr3+&quot;</span>
+</code></pre></div>
+<h3 id="authentication-with-existing-admin-credentials-secret-example">Authentication with Existing Admin Credentials Secret Example</h3>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000; font-weight: bold">auth</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">existingAdminSecret</span>:
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">name</span>:<span style="color: #BBB"> </span>auth-admin-secret
+</code></pre></div>
+<p>Use following configuration for centralised PosgreSQL DB backend for authentication backend.</p>
+<h3 id="authentication-postgres-db-backend-with-plain-settings-example">Authentication Postgres DB Backend with Plain Settings Example</h3>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000; font-weight: bold">auth</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">adminUsername</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;admin&quot;</span>
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">adminPassword</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;S3cr3+&quot;</span>
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">postgres</span>:
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">host</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;postgresql--auth-instance1.abcdef1234.eu-central-1.rds.amazonaws.com&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">port</span>:<span style="color: #BBB"> </span>5432
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">database</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;auth&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">user</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;mlflowauth&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">password</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;A4m1nPa33w0rd!&quot;</span>
+</code></pre></div>
+<h3 id="authentication-postgres-db-backend-with-existing-secret-example">Authentication Postgres DB Backend with Existing Secret Example</h3>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000; font-weight: bold">auth</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">existingAdminSecret</span>:
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">name</span>:<span style="color: #BBB"> </span>auth-admin-secret
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">postgres</span>:
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">host</span>:<span style="color: #BBB"> </span>postgresql--auth-instance1.abcdef1234.eu-central-1.rds.amazonaws.com
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">port</span>:<span style="color: #BBB"> </span>5432
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">database</span>:<span style="color: #BBB"> </span>auth
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">existingSecret</span>:
+<span style="color: #BBB">      </span><span style="color: #008000; font-weight: bold">name</span>:<span style="color: #BBB"> </span>auth-postgres-database-secret
+</code></pre></div>
+<h2 id="basic-authentication-with-ldap-backend">Basic Authentication with LDAP Backend</h2>
+<blockquote>
+<p><strong>Tip</strong>: auth and ldapAuth can not be enabled at same time!</p>
+</blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000; font-weight: bold">ldapAuth</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">uri</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;ldap://lldap:3890/dc=mlflow,dc=test&quot;</span>
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">tlsVerification</span>:<span style="color: #BBB"> </span>required
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">lookupBind</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;uid=%s,ou=people,dc=mlflow,dc=test&quot;</span>
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">groupAttribute</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;dn&quot;</span>
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">searchBaseDistinguishedName</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;ou=groups,dc=mlflow,dc=test&quot;</span>
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">searchFilter</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;(&amp;(objectclass=groupOfUniqueNames)(uniquemember=%s))&quot;</span>
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">adminGroupDistinguishedName</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;cn=test-admin,ou=groups,dc=mlflow,dc=test&quot;</span>
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">userGroupDistinguishedName</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;cn=test-user,ou=groups,dc=mlflow,dc=test&quot;</span>
+</code></pre></div>
+<h2 id="basic-authentication-with-ldap-backend-and-self-signed-ca-certificate">Basic Authentication with LDAP Backend and self-signed CA certificate</h2>
+<p>If you use self-signed certificate for your LDAP server, you can pass your self-signed CA certificate from <code>encodedTrustedCACertificate</code> variable by encoding it.</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000; font-weight: bold">ldapAuth</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">uri</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;ldap://lldap:3890/dc=mlflow,dc=test&quot;</span>
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">tlsVerification</span>:<span style="color: #BBB"> </span>required
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">lookupBind</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;uid=%s,ou=people,dc=mlflow,dc=test&quot;</span>
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">groupAttribute</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;dn&quot;</span>
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">searchBaseDistinguishedName</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;ou=groups,dc=mlflow,dc=test&quot;</span>
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">searchFilter</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;(&amp;(objectclass=groupOfUniqueNames)(uniquemember=%s))&quot;</span>
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">adminGroupDistinguishedName</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;cn=test-admin,ou=groups,dc=mlflow,dc=test&quot;</span>
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">userGroupDistinguishedName</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;cn=test-user,ou=groups,dc=mlflow,dc=test&quot;</span>
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">encodedTrustedCACertificate</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURoRENDQW15Z0F3SUJBZ0lSQUx1a3VyZnlCMFF0Z1FtbnphZDlMNWN3RFFZSktvWklodmNOQVFFTEJRQXcKU3pFZ01CNEdBMVVFQXd3WFRVeEdiRzkzSUV4RVFWQXRVMU5NTFZSbGMzUWdRMEV4RHpBTkJnTlZCQW9NQmsxTQpSbXh2ZHpFV01CUUdBMVVFQ3d3TlRFUkJVQzFUVTB3dFZHVnpkREFlRncweU5UQXpNRE14TnpJMU1qVmFGdzB5Ck5UQXpNRFF4TnpJMU1qVmFNRXN4SURBZUJnTlZCQU1NRjAxTVJteHZkeUJNUkVGUUxWTlRUQzFVWlhOMElFTkIKTVE4d0RRWURWUVFLREFaTlRFWnNiM2N4RmpBVUJnTlZCQXNNRFV4RVFWQXRVMU5NTFZSbGMzUXdnZ0VpTUEwRwpDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRRHNBNDc1NkRrZlVXRThZZjRHN0Z4ZFJkL0pnNXNkCjRJUVp1K3ZQcDRMTm5uM3E5VWlZeUtHZkVFRDJTMnRvYUVTS1VNakJyYWVRd3crUDV0dDVHcjNMQ3JQUmpjZTUKQ2xuMEh3NE5pRGJ5bkhWcDkxWXRjdHJObWtGMFRGdUYxNVE5OUMyR1lpbmNYUW93THduMWZXN2pTZjFuU3N1Kwpvek0veHFUa2FyQndtcVFkYTRlcW56cG5Xa2ZqL2ZHQTNVcnpwMHV6ZG1ZdnNhcmtiTkt0aGZSWTJ4UDhQZGc0Cm15dDJ6SmlycjN2MEo1OFNHeFN6ZWlab0tYUTNtTW5hRDZGTUVTcEg5THUydDVTRUVPZjlubFJLS2l4UzF0aWMKVHJUMDkzUVNKcWNRRkMyNTNwWmF1ZkpQNWR2SlVIR0NvcHFzVU5xc0Jkd2Ivd1grNnJFQm5YYUJBZ01CQUFHagpZekJoTUE4R0ExVWRFd0VCL3dRRk1BTUJBZjh3RGdZRFZSMFBBUUgvQkFRREFnRUdNQjBHQTFVZERnUVdCQlJsCnZVRmphb0c5NU1sWmxBSUs2SDRsaVlvMUNqQWZCZ05WSFNNRUdEQVdnQlJsdlVGamFvRzk1TWxabEFJSzZINGwKaVlvMUNqQU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFCNy96YWtlOHB6QWF3eHhvUW5mV3N1MkpSNWhyZkpjcQpjdCt1UEVnSWdnc3lFSmRGbndvbSt2UUV3a3NnT2tEYk10UGZnWTdRUVdUeHo4d1pQOXJDZVZaVUJ0T1FrdytKCjZCR2NLc1gwVnl5bUx5a1VOWUF5U2pEUE1Ma0NES2ZsRyt2eWFPWTZQbFdkZVJJTTVRMVZRL1B1SmQrbCtobEgKd2dFbU1RK2VjeVB2Wkhnd0t3cE41Zzh3YzI3bjI3RURqS29wUHpFMXpzRFN0MjFwUnMvcUdnZXZ6QTl2RlB5eAprWXdXdWJkblQ5NkwyTUUrVjcwTmJzbWt5ekl2T2NzajBlRnE0Z2EyNUQxQ2FhLzlyUnVOSlhwanYyQndYUm1tClNDNnBIV1dRWnh3NDRLQnJCM09EM1hLS25rMU94RFBDUzVwMzN2SHo4ZEZOMHNzb3EwV1VPUT09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K&quot;</span>
+</code></pre></div>
+<p>Or if you already stored your self-signed CA certifica in an external secret, you can pass secret name from <code>externalSecretForTrustedCACertificate</code> variable. The secret must keep CA certificate with <code>ca.crt</code> key.</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000; font-weight: bold">ldapAuth</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">uri</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;ldap://lldap:3890/dc=mlflow,dc=test&quot;</span>
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">tlsVerification</span>:<span style="color: #BBB"> </span>required
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">lookupBind</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;uid=%s,ou=people,dc=mlflow,dc=test&quot;</span>
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">groupAttribute</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;dn&quot;</span>
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">searchBaseDistinguishedName</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;ou=groups,dc=mlflow,dc=test&quot;</span>
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">searchFilter</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;(&amp;(objectclass=groupOfUniqueNames)(uniquemember=%s))&quot;</span>
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">adminGroupDistinguishedName</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;cn=test-admin,ou=groups,dc=mlflow,dc=test&quot;</span>
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">userGroupDistinguishedName</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;cn=test-user,ou=groups,dc=mlflow,dc=test&quot;</span>
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">externalSecretForTrustedCACertificate</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;external-ca-certificate-secret&quot;</span>
+</code></pre></div>
+<h2 id="auto-scaling-example">Auto Scaling Example</h2>
+<p>This Helm chart supports Horizontal Pod Autoscaling (HPA) to dynamically scale the MLflow <code>Deployment</code> based on metrics. The HPA resource is created when <code>autoscaling.enabled</code> is <code>true</code> and specific conditions are met (see Prerequisites).</p>
+<h3 id="prerequisites_1">Prerequisites</h3>
+<p>The HPA is created only if:</p>
+<ul>
+<li><code>autoscaling.enabled: true</code></li>
+<li>A backend store is enabled (<code>backendStore.postgres.enabled</code> or <code>backendStore.mysql.enabled</code>).</li>
+<li>An artifact store is enabled (<code>artifactRoot.azureBlob.enabled</code>, <code>artifactRoot.s3.enabled</code>, or <code>artifactRoot.gcs.enabled</code>).</li>
+<li>Auth is either enabled with Postgres (<code>auth.enabled</code> and <code>auth.postgres.enabled</code>) or disabled (<code>auth.enabled: false</code>).</li>
+</ul>
+<p>A metrics source (e.g., Metrics Server) is required for scaling.</p>
+<h3 id="example-1-basic-cpu-scaling">Example 1: Basic CPU Scaling</h3>
+<p>Scale between 1 and 5 replicas based on CPU usage:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000; font-weight: bold">autoscaling</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">minReplicas</span>:<span style="color: #BBB"> </span>1
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">maxReplicas</span>:<span style="color: #BBB"> </span>5
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">metrics</span>:
+<span style="color: #BBB">    </span>-<span style="color: #BBB"> </span><span style="color: #008000; font-weight: bold">type</span>:<span style="color: #BBB"> </span>Resource
+<span style="color: #BBB">      </span><span style="color: #008000; font-weight: bold">resource</span>:
+<span style="color: #BBB">        </span><span style="color: #008000; font-weight: bold">name</span>:<span style="color: #BBB"> </span>cpu
+<span style="color: #BBB">        </span><span style="color: #008000; font-weight: bold">target</span>:
+<span style="color: #BBB">          </span><span style="color: #008000; font-weight: bold">type</span>:<span style="color: #BBB"> </span>Utilization
+<span style="color: #BBB">          </span><span style="color: #008000; font-weight: bold">averageUtilization</span>:<span style="color: #BBB"> </span>80
+
+<span style="color: #008000; font-weight: bold">backendStore</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">postgres</span>:
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">host</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;postgresql-instance1.cg034hpkmmjt.eu-central-1.rds.amazonaws.com&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">port</span>:<span style="color: #BBB"> </span>5432
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">database</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;mlflow&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">user</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;mlflowuser&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">password</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;Pa33w0rd!&quot;</span>
+
+<span style="color: #008000; font-weight: bold">artifactRoot</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">s3</span>:
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">bucket</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;my-mlflow-artifact-root-backend&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">awsAccessKeyId</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;a1b2c3d4&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">awsSecretAccessKey</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;a1b2c3d4&quot;</span>
+</code></pre></div>
+<h3 id="example-2-custom-scaling-behavior">Example 2: Custom Scaling Behavior</h3>
+<p>Scale with custom behavior (1.18+):</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000; font-weight: bold">autoscaling</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">minReplicas</span>:<span style="color: #BBB"> </span>2
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">maxReplicas</span>:<span style="color: #BBB"> </span>10
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">metrics</span>:
+<span style="color: #BBB">    </span>-<span style="color: #BBB"> </span><span style="color: #008000; font-weight: bold">type</span>:<span style="color: #BBB"> </span>Resource
+<span style="color: #BBB">      </span><span style="color: #008000; font-weight: bold">resource</span>:
+<span style="color: #BBB">        </span><span style="color: #008000; font-weight: bold">name</span>:<span style="color: #BBB"> </span>cpu
+<span style="color: #BBB">        </span><span style="color: #008000; font-weight: bold">target</span>:
+<span style="color: #BBB">          </span><span style="color: #008000; font-weight: bold">type</span>:<span style="color: #BBB"> </span>Utilization
+<span style="color: #BBB">          </span><span style="color: #008000; font-weight: bold">averageUtilization</span>:<span style="color: #BBB"> </span>70
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">behavior</span>:
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">scaleUp</span>:
+<span style="color: #BBB">      </span><span style="color: #008000; font-weight: bold">stabilizationWindowSeconds</span>:<span style="color: #BBB"> </span>30
+<span style="color: #BBB">      </span><span style="color: #008000; font-weight: bold">policies</span>:
+<span style="color: #BBB">        </span>-<span style="color: #BBB"> </span><span style="color: #008000; font-weight: bold">type</span>:<span style="color: #BBB"> </span>Percent
+<span style="color: #BBB">          </span><span style="color: #008000; font-weight: bold">value</span>:<span style="color: #BBB"> </span>100
+<span style="color: #BBB">          </span><span style="color: #008000; font-weight: bold">periodSeconds</span>:<span style="color: #BBB"> </span>60
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">scaleDown</span>:
+<span style="color: #BBB">      </span><span style="color: #008000; font-weight: bold">stabilizationWindowSeconds</span>:<span style="color: #BBB"> </span>300
+
+<span style="color: #008000; font-weight: bold">backendStore</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">postgres</span>:
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">host</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;postgresql-instance1.cg034hpkmmjt.eu-central-1.rds.amazonaws.com&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">port</span>:<span style="color: #BBB"> </span>5432
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">database</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;mlflow&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">user</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;mlflowuser&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">password</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;Pa33w0rd!&quot;</span>
+
+<span style="color: #008000; font-weight: bold">artifactRoot</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">s3</span>:
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">bucket</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;my-mlflow-artifact-root-backend&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">awsAccessKeyId</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;a1b2c3d4&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">awsSecretAccessKey</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;a1b2c3d4&quot;</span>
+
+<span style="color: #008000; font-weight: bold">auth</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">adminUsername</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;admin&quot;</span>
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">adminPassword</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;S3cr3+&quot;</span>
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">postgres</span>:
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">enabled</span>:<span style="color: #BBB"> </span>true
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">host</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;postgresql--auth-instance1.abcdef1234.eu-central-1.rds.amazonaws.com&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">port</span>:<span style="color: #BBB"> </span>5432
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">database</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;auth&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">user</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;mlflowauth&quot;</span>
+<span style="color: #BBB">    </span><span style="color: #008000; font-weight: bold">password</span>:<span style="color: #BBB"> </span><span style="color: #BA2121">&quot;A4m1nPa33w0rd!&quot;</span>
+</code></pre></div>
+<h2 id="upgrading">Upgrading</h2>
+<p>This section outlines major updates and breaking changes for each version of the Helm Chart to help you transition smoothly between releases.</p>
+<hr />
+<h3 id="version-specific-upgrade-notes">Version-Specific Upgrade Notes</h3>
+<h4 id="upgrading-to-version-10x">Upgrading to Version 1.0.x</h4>
+<h5 id="action-required">Action Required</h5>
+<p>We started to use new <code>mlflow</code> major version 3 starting with this chart major version. Please consider to check <a href="https://mlflow.org/docs/3.0.0rc3/mlflow-3/breaking-changes">mlflow-3 breaking changes</a> official page.
+The new <code>mlflow</code> major version 3 has some changes in the database schema. Please run database migrations before upgrading to the new version.</p>
+<p>You can enable database migrations with the following configuration.</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000; font-weight: bold">backendStore</span>:
+<span style="color: #BBB">  </span><span style="color: #008000; font-weight: bold">databaseMigration</span>:<span style="color: #BBB"> </span>true
+</code></pre></div>
+<p>Or you can use the following mlflow CLI command to upgrade the database. You can find more information about the database migrations in the <a href="https://mlflow.org/docs/latest/api_reference/cli.html#mlflow-db-upgrade">mlflow documentation</a>.</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #717171">mlflow db upgrade &lt;database_uri&gt;</span>
+</code></pre></div>
+<h2 id="requirements">Requirements</h2>
+<p>Kubernetes: <code>&gt;=1.16.0-0</code></p>
+<table>
+<thead>
+<tr>
+<th>Repository</th>
+<th>Name</th>
+<th>Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>https://charts.bitnami.com/bitnami</td>
+<td>mysql</td>
+<td>14.0.3</td>
+</tr>
+<tr>
+<td>https://charts.bitnami.com/bitnami</td>
+<td>postgresql</td>
+<td>18.1.13</td>
+</tr>
+</tbody>
+</table>
+<h2 id="uninstall-helm-chart">Uninstall Helm Chart</h2>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #717171">helm uninstall [RELEASE_NAME]</span>
+</code></pre></div>
+<p>This removes all the Kubernetes components associated with the chart and deletes the release.</p>
+<p><em>See <a href="https://helm.sh/docs/helm/helm_uninstall/">helm uninstall</a> for command documentation.</em></p>
+<h2 id="upgrading-chart">Upgrading Chart</h2>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #717171">helm upgrade [RELEASE_NAME] mlflow-community/mlflow</span>
+</code></pre></div>
+<h2 id="values">Values</h2>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>affinity</td>
+<td>object</td>
+<td><code>{}</code></td>
+<td>For more information checkout: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity</td>
+</tr>
+<tr>
+<td>artifactRoot.azureBlob</td>
+<td>object</td>
+<td><code>{"accessKey":"","connectionString":"","container":"","enabled":false,"path":"","storageAccount":""}</code></td>
+<td>Specifies if you want to use Azure Blob Storage Mlflow Artifact Root</td>
+</tr>
+<tr>
+<td>artifactRoot.azureBlob.accessKey</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>Azure Cloud Storage Account Access Key for the container</td>
+</tr>
+<tr>
+<td>artifactRoot.azureBlob.connectionString</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>Azure Cloud Connection String for the container. Only connectionString or accessKey required</td>
+</tr>
+<tr>
+<td>artifactRoot.azureBlob.container</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>Azure blob container name</td>
+</tr>
+<tr>
+<td>artifactRoot.azureBlob.enabled</td>
+<td>bool</td>
+<td><code>false</code></td>
+<td>Specifies if you want to use Azure Blob Storage Mlflow Artifact Root</td>
+</tr>
+<tr>
+<td>artifactRoot.azureBlob.path</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>Azure blob container folder. If you want to use root level, please don't set anything.</td>
+</tr>
+<tr>
+<td>artifactRoot.azureBlob.storageAccount</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>Azure storage account name</td>
+</tr>
+<tr>
+<td>artifactRoot.defaultArtifactRoot</td>
+<td>string</td>
+<td><code>"./mlruns"</code></td>
+<td>Specifies the default artifact root.</td>
+</tr>
+<tr>
+<td>artifactRoot.defaultArtifactsDestination</td>
+<td>string</td>
+<td><code>"./mlartifacts"</code></td>
+<td>Specifies the default artifacts destination</td>
+</tr>
+<tr>
+<td>artifactRoot.gcs</td>
+<td>object</td>
+<td><code>{"bucket":"","enabled":false,"path":""}</code></td>
+<td>Specifies if you want to use Google Cloud Storage Mlflow Artifact Root</td>
+</tr>
+<tr>
+<td>artifactRoot.gcs.bucket</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>Google Cloud Storage bucket name</td>
+</tr>
+<tr>
+<td>artifactRoot.gcs.enabled</td>
+<td>bool</td>
+<td><code>false</code></td>
+<td>Specifies if you want to use Google Cloud Storage Mlflow Artifact Root</td>
+</tr>
+<tr>
+<td>artifactRoot.gcs.path</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>Google Cloud Storage bucket folder. If you want to use root level, please don't set anything.</td>
+</tr>
+<tr>
+<td>artifactRoot.proxiedArtifactStorage</td>
+<td>bool</td>
+<td><code>false</code></td>
+<td>Specifies if you want to enable proxied artifact storage access</td>
+</tr>
+<tr>
+<td>artifactRoot.s3</td>
+<td>object</td>
+<td><code>{"awsAccessKeyId":"","awsSecretAccessKey":"","bucket":"","enabled":false,"existingSecret":{"keyOfAccessKeyId":"","keyOfSecretAccessKey":"","name":""},"path":""}</code></td>
+<td>Specifies if you want to use AWS S3 Mlflow Artifact Root</td>
+</tr>
+<tr>
+<td>artifactRoot.s3.awsAccessKeyId</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>AWS IAM user AWS_ACCESS_KEY_ID which has attached policy for access to the S3 bucket</td>
+</tr>
+<tr>
+<td>artifactRoot.s3.awsSecretAccessKey</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>AWS IAM user AWS_SECRET_ACCESS_KEY which has attached policy for access to the S3 bucket</td>
+</tr>
+<tr>
+<td>artifactRoot.s3.bucket</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>S3 bucket name</td>
+</tr>
+<tr>
+<td>artifactRoot.s3.enabled</td>
+<td>bool</td>
+<td><code>false</code></td>
+<td>Specifies if you want to use AWS S3 Mlflow Artifact Root</td>
+</tr>
+<tr>
+<td>artifactRoot.s3.existingSecret</td>
+<td>object</td>
+<td><code>{"keyOfAccessKeyId":"","keyOfSecretAccessKey":"","name":""}</code></td>
+<td>Existing secret for AWS IAM user AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY secrets.</td>
+</tr>
+<tr>
+<td>artifactRoot.s3.existingSecret.keyOfAccessKeyId</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>This is for setting up the key for AWS_ACCESS_KEY_ID secret. If it's set, awsAccessKeyId will be ignored.</td>
+</tr>
+<tr>
+<td>artifactRoot.s3.existingSecret.keyOfSecretAccessKey</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>This is for setting up the key for AWS_SECRET_ACCESS_KEY secret. If it's set, awsSecretAccessKey will be ignored.</td>
+</tr>
+<tr>
+<td>artifactRoot.s3.existingSecret.name</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>This is for setting up the AWS IAM user secrets existing secret name.</td>
+</tr>
+<tr>
+<td>artifactRoot.s3.path</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>S3 bucket folder. If you want to use root level, please don't set anything.</td>
+</tr>
+<tr>
+<td>auth</td>
+<td>object</td>
+<td><code>{"adminPassword":"","adminUsername":"","appName":"basic-auth","authorizationFunction":"mlflow.server.auth:authenticate_request_basic_auth","configFile":"basic_auth.ini","configPath":"/etc/mlflow/auth/","defaultPermission":"READ","enabled":false,"existingAdminSecret":{"name":"","passwordKey":"password","usernameKey":"username"},"postgres":{"database":"","driver":"","enabled":false,"existingSecret":{"name":"","passwordKey":"password","usernameKey":"username"},"host":"","password":"","port":5432,"user":""},"sqliteFile":"basic_auth.db","sqliteFullPath":""}</code></td>
+<td>Mlflow authentication settings</td>
+</tr>
+<tr>
+<td>auth.adminPassword</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>Mlflow admin user password</td>
+</tr>
+<tr>
+<td>auth.adminUsername</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>Mlflow admin user username</td>
+</tr>
+<tr>
+<td>auth.appName</td>
+<td>string</td>
+<td><code>"basic-auth"</code></td>
+<td>Default registered authentication app name. If you want to use your custom authentication function, please look at: https://mlflow.org/docs/latest/auth/index.html#custom-authentication</td>
+</tr>
+<tr>
+<td>auth.authorizationFunction</td>
+<td>string</td>
+<td><code>"mlflow.server.auth:authenticate_request_basic_auth"</code></td>
+<td>Default authentication function</td>
+</tr>
+<tr>
+<td>auth.configFile</td>
+<td>string</td>
+<td><code>"basic_auth.ini"</code></td>
+<td>Mlflow authentication INI file</td>
+</tr>
+<tr>
+<td>auth.configPath</td>
+<td>string</td>
+<td><code>"/etc/mlflow/auth/"</code></td>
+<td>Mlflow authentication INI configuration file path.</td>
+</tr>
+<tr>
+<td>auth.defaultPermission</td>
+<td>string</td>
+<td><code>"READ"</code></td>
+<td>Default permission for all users. More details: https://mlflow.org/docs/latest/auth/index.html#permissions</td>
+</tr>
+<tr>
+<td>auth.enabled</td>
+<td>bool</td>
+<td><code>false</code></td>
+<td>Specifies if you want to enable mlflow authentication. auth and ldapAuth can't be enabled at same time.</td>
+</tr>
+<tr>
+<td>auth.existingAdminSecret</td>
+<td>object</td>
+<td><code>{"name":"","passwordKey":"password","usernameKey":"username"}</code></td>
+<td>Specifies if you want to use an existing admin credentials secret for auth. If it's set, adminUsername and adminPassword will be ignored.</td>
+</tr>
+<tr>
+<td>auth.existingAdminSecret.name</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>The name of the existing admin credentials secret.</td>
+</tr>
+<tr>
+<td>auth.existingAdminSecret.passwordKey</td>
+<td>string</td>
+<td><code>"password"</code></td>
+<td>The key of the admin password in the existing admin credentials secret.</td>
+</tr>
+<tr>
+<td>auth.existingAdminSecret.usernameKey</td>
+<td>string</td>
+<td><code>"username"</code></td>
+<td>The key of the admin username in the existing admin credentials secret.</td>
+</tr>
+<tr>
+<td>auth.postgres</td>
+<td>object</td>
+<td><code>{"database":"","driver":"","enabled":false,"existingSecret":{"name":"","passwordKey":"password","usernameKey":"username"},"host":"","password":"","port":5432,"user":""}</code></td>
+<td>PostgreSQL based centrilised authentication database</td>
+</tr>
+<tr>
+<td>auth.postgres.database</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>mlflow authorization database name created before in the postgres instance</td>
+</tr>
+<tr>
+<td>auth.postgres.driver</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>postgres database connection driver. e.g.: "psycopg2"</td>
+</tr>
+<tr>
+<td>auth.postgres.enabled</td>
+<td>bool</td>
+<td><code>false</code></td>
+<td>Specifies if you want to use postgres auth backend storage</td>
+</tr>
+<tr>
+<td>auth.postgres.existingSecret</td>
+<td>object</td>
+<td><code>{"name":"","passwordKey":"password","usernameKey":"username"}</code></td>
+<td>Specifies if you want to use an existing database secret for auth. If it's set, user and password will be ignored.</td>
+</tr>
+<tr>
+<td>auth.postgres.existingSecret.name</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>The name of the existing database secret.</td>
+</tr>
+<tr>
+<td>auth.postgres.existingSecret.passwordKey</td>
+<td>string</td>
+<td><code>"password"</code></td>
+<td>The key of the password in the existing database secret.</td>
+</tr>
+<tr>
+<td>auth.postgres.existingSecret.usernameKey</td>
+<td>string</td>
+<td><code>"username"</code></td>
+<td>The key of the username in the existing database secret.</td>
+</tr>
+<tr>
+<td>auth.postgres.host</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>Postgres host address. e.g. your RDS or Azure Postgres Service endpoint</td>
+</tr>
+<tr>
+<td>auth.postgres.password</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>postgres database user password which can access to mlflow authorization database</td>
+</tr>
+<tr>
+<td>auth.postgres.port</td>
+<td>int</td>
+<td><code>5432</code></td>
+<td>Postgres service port</td>
+</tr>
+<tr>
+<td>auth.postgres.user</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>postgres database user name which can access to mlflow authorization database</td>
+</tr>
+<tr>
+<td>auth.sqliteFile</td>
+<td>string</td>
+<td><code>"basic_auth.db"</code></td>
+<td>SQLite database file</td>
+</tr>
+<tr>
+<td>auth.sqliteFullPath</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>SQLite database folder. Default is user home directory.</td>
+</tr>
+<tr>
+<td>autoscaling</td>
+<td>object</td>
+<td><code>{"behavior":{},"enabled":false,"maxReplicas":5,"metrics":[{"resource":{"name":"memory","target":{"averageUtilization":80,"type":"Utilization"}},"type":"Resource"},{"resource":{"name":"cpu","target":{"averageUtilization":80,"type":"Utilization"}},"type":"Resource"}],"minReplicas":1}</code></td>
+<td>Autoscaling settings. Can be enabled only when backendStore is not sqlite and artifactRoot is one of blob storage systems.</td>
+</tr>
+<tr>
+<td>autoscaling.behavior</td>
+<td>object</td>
+<td><code>{}</code></td>
+<td>The behavior of the autoscaler. Only supported on K8s 1.18.0 or later.</td>
+</tr>
+<tr>
+<td>autoscaling.enabled</td>
+<td>bool</td>
+<td><code>false</code></td>
+<td>If true, the number of replicas will be automatically scaled based on default metrics. On default, it will scale based on CPU and memory. For more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/"</td>
+</tr>
+<tr>
+<td>autoscaling.maxReplicas</td>
+<td>int</td>
+<td><code>5</code></td>
+<td>The maximum number of replicas.</td>
+</tr>
+<tr>
+<td>autoscaling.metrics</td>
+<td>list</td>
+<td><code>[{"resource":{"name":"memory","target":{"averageUtilization":80,"type":"Utilization"}},"type":"Resource"},{"resource":{"name":"cpu","target":{"averageUtilization":80,"type":"Utilization"}},"type":"Resource"}]</code></td>
+<td>The metrics to use for autoscaling.</td>
+</tr>
+<tr>
+<td>autoscaling.minReplicas</td>
+<td>int</td>
+<td><code>1</code></td>
+<td>The minimum number of replicas.</td>
+</tr>
+<tr>
+<td>backendStore</td>
+<td>object</td>
+<td><code>{"databaseConnectionCheck":false,"databaseMigration":false,"defaultSqlitePath":":memory:","existingDatabaseSecret":{"name":"","passwordKey":"password","usernameKey":"username"},"mssql":{"database":"","driver":"pymssql","enabled":false,"host":"","password":"","port":1433,"user":""},"mysql":{"database":"","driver":"pymysql","enabled":false,"host":"","password":"","port":3306,"user":""},"postgres":{"database":"","driver":"","enabled":false,"host":"","password":"","port":5432,"user":""}}</code></td>
+<td>Mlflow database connection settings</td>
+</tr>
+<tr>
+<td>backendStore.databaseConnectionCheck</td>
+<td>bool</td>
+<td><code>false</code></td>
+<td>Add an additional init container, which checks for database availability</td>
+</tr>
+<tr>
+<td>backendStore.databaseMigration</td>
+<td>bool</td>
+<td><code>false</code></td>
+<td>Specifies if you want to run database migration</td>
+</tr>
+<tr>
+<td>backendStore.defaultSqlitePath</td>
+<td>string</td>
+<td><code>":memory:"</code></td>
+<td>Specifies the default sqlite path</td>
+</tr>
+<tr>
+<td>backendStore.existingDatabaseSecret</td>
+<td>object</td>
+<td><code>{"name":"","passwordKey":"password","usernameKey":"username"}</code></td>
+<td>Specifies if you want to use an existing database secret.</td>
+</tr>
+<tr>
+<td>backendStore.existingDatabaseSecret.name</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>The name of the existing database secret.</td>
+</tr>
+<tr>
+<td>backendStore.existingDatabaseSecret.passwordKey</td>
+<td>string</td>
+<td><code>"password"</code></td>
+<td>The key of the password in the existing database secret.</td>
+</tr>
+<tr>
+<td>backendStore.existingDatabaseSecret.usernameKey</td>
+<td>string</td>
+<td><code>"username"</code></td>
+<td>The key of the username in the existing database secret.</td>
+</tr>
+<tr>
+<td>backendStore.mssql.database</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>mlflow database name created before in the mssql instance</td>
+</tr>
+<tr>
+<td>backendStore.mssql.driver</td>
+<td>string</td>
+<td><code>"pymssql"</code></td>
+<td>mssql database connection driver. e.g.: "pymssql"</td>
+</tr>
+<tr>
+<td>backendStore.mssql.enabled</td>
+<td>bool</td>
+<td><code>false</code></td>
+<td>Specifies if you want to use mssql backend storage</td>
+</tr>
+<tr>
+<td>backendStore.mssql.host</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>mssql host address</td>
+</tr>
+<tr>
+<td>backendStore.mssql.password</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>mssql database user password which can access to mlflow database</td>
+</tr>
+<tr>
+<td>backendStore.mssql.port</td>
+<td>int</td>
+<td><code>1433</code></td>
+<td>mssql service port</td>
+</tr>
+<tr>
+<td>backendStore.mssql.user</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>mssql database user name which can access to mlflow database</td>
+</tr>
+<tr>
+<td>backendStore.mysql.database</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>mlflow database name created before in the mysql instance</td>
+</tr>
+<tr>
+<td>backendStore.mysql.driver</td>
+<td>string</td>
+<td><code>"pymysql"</code></td>
+<td>mysql database connection driver. e.g.: "pymysql"</td>
+</tr>
+<tr>
+<td>backendStore.mysql.enabled</td>
+<td>bool</td>
+<td><code>false</code></td>
+<td>Specifies if you want to use mysql backend storage</td>
+</tr>
+<tr>
+<td>backendStore.mysql.host</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>MySQL host address. e.g. your Amazon RDS for MySQL</td>
+</tr>
+<tr>
+<td>backendStore.mysql.password</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>mysql database user password which can access to mlflow database</td>
+</tr>
+<tr>
+<td>backendStore.mysql.port</td>
+<td>int</td>
+<td><code>3306</code></td>
+<td>MySQL service port</td>
+</tr>
+<tr>
+<td>backendStore.mysql.user</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>mysql database user name which can access to mlflow database</td>
+</tr>
+<tr>
+<td>backendStore.postgres.database</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>mlflow database name created before in the postgres instance</td>
+</tr>
+<tr>
+<td>backendStore.postgres.driver</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>postgres database connection driver. e.g.: "psycopg2"</td>
+</tr>
+<tr>
+<td>backendStore.postgres.enabled</td>
+<td>bool</td>
+<td><code>false</code></td>
+<td>Specifies if you want to use postgres backend storage</td>
+</tr>
+<tr>
+<td>backendStore.postgres.host</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>Postgres host address. e.g. your RDS or Azure Postgres Service endpoint</td>
+</tr>
+<tr>
+<td>backendStore.postgres.password</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>postgres database user password which can access to mlflow database</td>
+</tr>
+<tr>
+<td>backendStore.postgres.port</td>
+<td>int</td>
+<td><code>5432</code></td>
+<td>Postgres service port</td>
+</tr>
+<tr>
+<td>backendStore.postgres.user</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>postgres database user name which can access to mlflow database</td>
+</tr>
+<tr>
+<td>extraArgs</td>
+<td>object</td>
+<td><code>{}</code></td>
+<td>A map of arguments and values to pass to the <code>mlflow server</code> command. Keys must be camelcase. Helm will turn them to kebabcase style.</td>
+</tr>
+<tr>
+<td>extraContainers</td>
+<td>list</td>
+<td><code>[]</code></td>
+<td>Extra containers for the mlflow pod</td>
+</tr>
+<tr>
+<td>extraEnvVars</td>
+<td>object</td>
+<td><code>{}</code></td>
+<td>Extra environment variables</td>
+</tr>
+<tr>
+<td>extraFlags</td>
+<td>list</td>
+<td><code>[]</code></td>
+<td>A list of flags to pass to <code>mlflow server</code> command. Items must be camelcase. Helm will turn them to kebabcase style.</td>
+</tr>
+<tr>
+<td>extraPodLabels</td>
+<td>object</td>
+<td><code>{}</code></td>
+<td>Extra labels for the pod</td>
+</tr>
+<tr>
+<td>extraSecretNamesForEnvFrom</td>
+<td>list</td>
+<td><code>[]</code></td>
+<td>Extra secrets for environment variables</td>
+</tr>
+<tr>
+<td>extraVolumeMounts</td>
+<td>list</td>
+<td><code>[]</code></td>
+<td>Extra Volume Mounts for the mlflow container</td>
+</tr>
+<tr>
+<td>extraVolumes</td>
+<td>list</td>
+<td><code>[]</code></td>
+<td>Extra Volumes for the pod</td>
+</tr>
+<tr>
+<td>flaskServerSecretKey</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>Mlflow Flask Server Secret Key. Default: Will be auto generated.</td>
+</tr>
+<tr>
+<td>fullnameOverride</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>String to override the default generated fullname</td>
+</tr>
+<tr>
+<td>image</td>
+<td>object</td>
+<td><code>{"pullPolicy":"IfNotPresent","repository":"burakince/mlflow","tag":""}</code></td>
+<td>Image of mlflow</td>
+</tr>
+<tr>
+<td>image.pullPolicy</td>
+<td>string</td>
+<td><code>"IfNotPresent"</code></td>
+<td>The docker image pull policy</td>
+</tr>
+<tr>
+<td>image.repository</td>
+<td>string</td>
+<td><code>"burakince/mlflow"</code></td>
+<td>The docker image repository to use</td>
+</tr>
+<tr>
+<td>image.tag</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>The docker image tag to use. Default app version</td>
+</tr>
+<tr>
+<td>imagePullSecrets</td>
+<td>list</td>
+<td><code>[]</code></td>
+<td>Image pull secrets for private docker registry usages</td>
+</tr>
+<tr>
+<td>ingress.annotations</td>
+<td>object</td>
+<td><code>{}</code></td>
+<td>Additional ingress annotations</td>
+</tr>
+<tr>
+<td>ingress.className</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>New style ingress class name. Only possible if you use K8s 1.18.0 or later version</td>
+</tr>
+<tr>
+<td>ingress.enabled</td>
+<td>bool</td>
+<td><code>false</code></td>
+<td>Specifies if you want to create an ingress access</td>
+</tr>
+<tr>
+<td>ingress.hosts[0].host</td>
+<td>string</td>
+<td><code>"chart-example.local"</code></td>
+<td></td>
+</tr>
+<tr>
+<td>ingress.hosts[0].paths[0].path</td>
+<td>string</td>
+<td><code>"/"</code></td>
+<td></td>
+</tr>
+<tr>
+<td>ingress.hosts[0].paths[0].pathType</td>
+<td>string</td>
+<td><code>"ImplementationSpecific"</code></td>
+<td>Ingress path type</td>
+</tr>
+<tr>
+<td>ingress.tls</td>
+<td>list</td>
+<td><code>[]</code></td>
+<td>Ingress tls configuration for https access</td>
+</tr>
+<tr>
+<td>initContainers</td>
+<td>list</td>
+<td><code>[]</code></td>
+<td>Init Containers for Mlflow Pod</td>
+</tr>
+<tr>
+<td>initImages</td>
+<td>object</td>
+<td><code>{"dbchecker":{"pullPolicy":"IfNotPresent","repository":"busybox","tag":"1.32"},"iniFileInitializer":{"pullPolicy":"IfNotPresent","repository":"busybox","tag":"1.32"},"mlflowDbMigration":{"pullPolicy":"IfNotPresent","repository":"burakince/mlflow","tag":""}}</code></td>
+<td>mlflow init images</td>
+</tr>
+<tr>
+<td>initImages.dbchecker</td>
+<td>object</td>
+<td><code>{"pullPolicy":"IfNotPresent","repository":"busybox","tag":"1.32"}</code></td>
+<td>dbchecker init container image configuration</td>
+</tr>
+<tr>
+<td>initImages.dbchecker.pullPolicy</td>
+<td>string</td>
+<td><code>"IfNotPresent"</code></td>
+<td>dbchecker init container image pull policy</td>
+</tr>
+<tr>
+<td>initImages.dbchecker.repository</td>
+<td>string</td>
+<td><code>"busybox"</code></td>
+<td>dbchecker init container image repository to use</td>
+</tr>
+<tr>
+<td>initImages.dbchecker.tag</td>
+<td>string</td>
+<td><code>"1.32"</code></td>
+<td>dbchecker init container image tag to use</td>
+</tr>
+<tr>
+<td>initImages.iniFileInitializer</td>
+<td>object</td>
+<td><code>{"pullPolicy":"IfNotPresent","repository":"busybox","tag":"1.32"}</code></td>
+<td>ini-file-initializer init container image configuration</td>
+</tr>
+<tr>
+<td>initImages.iniFileInitializer.pullPolicy</td>
+<td>string</td>
+<td><code>"IfNotPresent"</code></td>
+<td>ini-file-initializer init container image pull policy</td>
+</tr>
+<tr>
+<td>initImages.iniFileInitializer.repository</td>
+<td>string</td>
+<td><code>"busybox"</code></td>
+<td>ini-file-initializer init container image repository to use</td>
+</tr>
+<tr>
+<td>initImages.iniFileInitializer.tag</td>
+<td>string</td>
+<td><code>"1.32"</code></td>
+<td>ini-file-initializer init container image tag to use</td>
+</tr>
+<tr>
+<td>initImages.mlflowDbMigration</td>
+<td>object</td>
+<td><code>{"pullPolicy":"IfNotPresent","repository":"burakince/mlflow","tag":""}</code></td>
+<td>mlflow-db-migration init container image configuration</td>
+</tr>
+<tr>
+<td>initImages.mlflowDbMigration.pullPolicy</td>
+<td>string</td>
+<td><code>"IfNotPresent"</code></td>
+<td>mlflow-db-migration init container image pull policy.</td>
+</tr>
+<tr>
+<td>initImages.mlflowDbMigration.repository</td>
+<td>string</td>
+<td><code>"burakince/mlflow"</code></td>
+<td>mlflow-db-migration init container image repository to use.</td>
+</tr>
+<tr>
+<td>initImages.mlflowDbMigration.tag</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>mlflow-db-migration init container image tag to use. Default app version</td>
+</tr>
+<tr>
+<td>ldapAuth</td>
+<td>object</td>
+<td><code>{"adminGroupDistinguishedName":"","enabled":false,"encodedTrustedCACertificate":"","externalSecretForTrustedCACertificate":"","groupAttribute":"dn","groupAttributeKey":"","lookupBind":"","searchBaseDistinguishedName":"","searchFilter":"(&amp;(objectclass=groupOfUniqueNames)(uniquemember=%s))","tlsVerification":"required","uri":"","userGroupDistinguishedName":""}</code></td>
+<td>Basic Authentication with LDAP backend</td>
+</tr>
+<tr>
+<td>ldapAuth.adminGroupDistinguishedName</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>LDAP DN for the admin group. e.g.: "cn=test-admin,ou=groups,dc=mlflow,dc=test"</td>
+</tr>
+<tr>
+<td>ldapAuth.enabled</td>
+<td>bool</td>
+<td><code>false</code></td>
+<td>Specifies if you want to enable mlflow LDAP authentication. auth and ldapAuth can't be enabled at same time.</td>
+</tr>
+<tr>
+<td>ldapAuth.encodedTrustedCACertificate</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>Base64 encoded trusted CA certificate for LDAP server connection.</td>
+</tr>
+<tr>
+<td>ldapAuth.externalSecretForTrustedCACertificate</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>External secret name for trusted CA certificate for LDAP server connection.</td>
+</tr>
+<tr>
+<td>ldapAuth.groupAttribute</td>
+<td>string</td>
+<td><code>"dn"</code></td>
+<td>LDAP group attribute.</td>
+</tr>
+<tr>
+<td>ldapAuth.groupAttributeKey</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>Optional group attribute key for Active Directory users. e.g.: "attributes"</td>
+</tr>
+<tr>
+<td>ldapAuth.lookupBind</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>LDAP Loopup Bind. e.g.: "uid=%s,ou=people,dc=mlflow,dc=test"</td>
+</tr>
+<tr>
+<td>ldapAuth.searchBaseDistinguishedName</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>LDAP base DN for the search. e.g.: "ou=groups,dc=mlflow,dc=test"</td>
+</tr>
+<tr>
+<td>ldapAuth.searchFilter</td>
+<td>string</td>
+<td><code>"(&amp;(objectclass=groupOfUniqueNames)(uniquemember=%s))"</code></td>
+<td>LDAP query filter for search</td>
+</tr>
+<tr>
+<td>ldapAuth.tlsVerification</td>
+<td>string</td>
+<td><code>"required"</code></td>
+<td>TLS verification mode. Options: required, optional, none</td>
+</tr>
+<tr>
+<td>ldapAuth.uri</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>LDAP URI. e.g.: "ldap://lldap:3890/dc=mlflow,dc=test"</td>
+</tr>
+<tr>
+<td>ldapAuth.userGroupDistinguishedName</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>LDAP DN for the user group. e.g.: "cn=test-user,ou=groups,dc=mlflow,dc=test"</td>
+</tr>
+<tr>
+<td>livenessProbe</td>
+<td>object</td>
+<td><code>{"failureThreshold":5,"initialDelaySeconds":10,"periodSeconds":30,"timeoutSeconds":3}</code></td>
+<td>Liveness probe configurations. Please look to <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes">here</a>.</td>
+</tr>
+<tr>
+<td>log</td>
+<td>object</td>
+<td><code>{"enabled":true,"level":"info"}</code></td>
+<td>Mlflow logging settings</td>
+</tr>
+<tr>
+<td>log.enabled</td>
+<td>bool</td>
+<td><code>true</code></td>
+<td>Specifies if you want to enable mlflow logging.</td>
+</tr>
+<tr>
+<td>log.level</td>
+<td>string</td>
+<td><code>"info"</code></td>
+<td>Mlflow logging level.</td>
+</tr>
+<tr>
+<td>mysql</td>
+<td>object</td>
+<td><code>{"architecture":"standalone","auth":{"database":"mlflow","password":"","username":""},"enabled":false,"image":{"repository":"bitnamilegacy/mysql"},"primary":{"persistence":{"enabled":true,"existingClaim":""},"service":{"ports":{"mysql":3306}}}}</code></td>
+<td>Bitnami MySQL configuration. For more information checkout: https://github.com/bitnami/charts/tree/main/bitnami/mysql</td>
+</tr>
+<tr>
+<td>mysql.auth.database</td>
+<td>string</td>
+<td><code>"mlflow"</code></td>
+<td>The name of the MySQL database.</td>
+</tr>
+<tr>
+<td>mysql.enabled</td>
+<td>bool</td>
+<td><code>false</code></td>
+<td>Enable mysql</td>
+</tr>
+<tr>
+<td>mysql.image.repository</td>
+<td>string</td>
+<td><code>"bitnamilegacy/mysql"</code></td>
+<td>This is temporary workaround because of bitnami's deprecation until to completely replace it with our solution.</td>
+</tr>
+<tr>
+<td>nameOverride</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>String to override the default generated name</td>
+</tr>
+<tr>
+<td>nodeSelector</td>
+<td>object</td>
+<td><code>{}</code></td>
+<td>For more information checkout: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector</td>
+</tr>
+<tr>
+<td>podAnnotations</td>
+<td>object</td>
+<td><code>{}</code></td>
+<td>Annotations for the pod</td>
+</tr>
+<tr>
+<td>podSecurityContext</td>
+<td>object</td>
+<td><code>{"fsGroup":1001,"fsGroupChangePolicy":"OnRootMismatch"}</code></td>
+<td>This is for setting Security Context to a Pod. For more information checkout: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/</td>
+</tr>
+<tr>
+<td>postgresql</td>
+<td>object</td>
+<td><code>{"architecture":"standalone","auth":{"database":"mlflow","password":"","username":""},"enabled":false,"image":{"repository":"bitnamilegacy/postgresql"},"primary":{"persistence":{"enabled":true,"existingClaim":""},"service":{"ports":{"postgresql":5432}}}}</code></td>
+<td>Bitnami PostgreSQL configuration. For more information checkout: https://github.com/bitnami/charts/tree/main/bitnami/postgresql</td>
+</tr>
+<tr>
+<td>postgresql.auth.database</td>
+<td>string</td>
+<td><code>"mlflow"</code></td>
+<td>The name of the PostgreSQL database.</td>
+</tr>
+<tr>
+<td>postgresql.enabled</td>
+<td>bool</td>
+<td><code>false</code></td>
+<td>Enable postgresql</td>
+</tr>
+<tr>
+<td>postgresql.image.repository</td>
+<td>string</td>
+<td><code>"bitnamilegacy/postgresql"</code></td>
+<td>This is temporary workaround because of bitnami's deprecation until to completely replace it with our solution.</td>
+</tr>
+<tr>
+<td>readinessProbe</td>
+<td>object</td>
+<td><code>{"failureThreshold":5,"initialDelaySeconds":10,"periodSeconds":30,"timeoutSeconds":3}</code></td>
+<td>Readiness probe configurations. Please look to <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes">here</a>.</td>
+</tr>
+<tr>
+<td>replicaCount</td>
+<td>int</td>
+<td><code>1</code></td>
+<td>Numbers of replicas</td>
+</tr>
+<tr>
+<td>resources</td>
+<td>object</td>
+<td><code>{}</code></td>
+<td>This block is for setting up the resource management for the pod more information can be found here: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/</td>
+</tr>
+<tr>
+<td>securityContext</td>
+<td>object</td>
+<td><code>{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"privileged":false,"readOnlyRootFilesystem":false,"runAsGroup":1001,"runAsNonRoot":true,"runAsUser":1001}</code></td>
+<td>This is for setting Security Context to a Container. For more information checkout: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/</td>
+</tr>
+<tr>
+<td>service</td>
+<td>object</td>
+<td><code>{"annotations":{},"containerPort":5000,"containerPortName":"mlflow","enabled":true,"name":"http","port":80,"type":"ClusterIP"}</code></td>
+<td>This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/</td>
+</tr>
+<tr>
+<td>service.annotations</td>
+<td>object</td>
+<td><code>{}</code></td>
+<td>Additional service annotations</td>
+</tr>
+<tr>
+<td>service.containerPort</td>
+<td>int</td>
+<td><code>5000</code></td>
+<td>Default container port</td>
+</tr>
+<tr>
+<td>service.containerPortName</td>
+<td>string</td>
+<td><code>"mlflow"</code></td>
+<td>Default container port name</td>
+</tr>
+<tr>
+<td>service.enabled</td>
+<td>bool</td>
+<td><code>true</code></td>
+<td>Specifies if you want to create a service</td>
+</tr>
+<tr>
+<td>service.name</td>
+<td>string</td>
+<td><code>"http"</code></td>
+<td>Default Service name</td>
+</tr>
+<tr>
+<td>service.port</td>
+<td>int</td>
+<td><code>80</code></td>
+<td>This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports</td>
+</tr>
+<tr>
+<td>service.type</td>
+<td>string</td>
+<td><code>"ClusterIP"</code></td>
+<td>This sets the service type more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types</td>
+</tr>
+<tr>
+<td>serviceAccount.annotations</td>
+<td>object</td>
+<td><code>{}</code></td>
+<td>Annotations to add to the service account. AWS EKS users can assign role arn from here. Please find more information from here: https://docs.aws.amazon.com/eks/latest/userguide/associate-service-account-role.html</td>
+</tr>
+<tr>
+<td>serviceAccount.automount</td>
+<td>bool</td>
+<td><code>true</code></td>
+<td>Automatically mount a ServiceAccount's API credentials?</td>
+</tr>
+<tr>
+<td>serviceAccount.create</td>
+<td>bool</td>
+<td><code>true</code></td>
+<td>Specifies whether a ServiceAccount should be created</td>
+</tr>
+<tr>
+<td>serviceAccount.name</td>
+<td>string</td>
+<td><code>""</code></td>
+<td>The name of the ServiceAccount to use. If not set and create is true, a name is generated using the fullname template</td>
+</tr>
+<tr>
+<td>serviceMonitor.enabled</td>
+<td>bool</td>
+<td><code>false</code></td>
+<td>When set true then use a ServiceMonitor to configure scraping</td>
+</tr>
+<tr>
+<td>serviceMonitor.interval</td>
+<td>string</td>
+<td><code>"30s"</code></td>
+<td>Set how frequently Prometheus should scrape</td>
+</tr>
+<tr>
+<td>serviceMonitor.labels</td>
+<td>object</td>
+<td><code>{"release":"prometheus"}</code></td>
+<td>Set labels for the ServiceMonitor, use this to define your scrape label for Prometheus Operator</td>
+</tr>
+<tr>
+<td>serviceMonitor.labels.release</td>
+<td>string</td>
+<td><code>"prometheus"</code></td>
+<td>default <code>kube prometheus stack</code> helm chart serviceMonitor selector label Mostly it's your prometheus helm release name. Please find more information from here: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/platform/troubleshooting.md#troubleshooting-servicemonitor-changes</td>
+</tr>
+<tr>
+<td>serviceMonitor.metricRelabelings</td>
+<td>list</td>
+<td><code>[]</code></td>
+<td>Set of rules to relabel your exist metric labels</td>
+</tr>
+<tr>
+<td>serviceMonitor.namespace</td>
+<td>string</td>
+<td><code>"monitoring"</code></td>
+<td>Set the namespace the ServiceMonitor should be deployed</td>
+</tr>
+<tr>
+<td>serviceMonitor.targetLabels</td>
+<td>list</td>
+<td><code>[]</code></td>
+<td>Set of labels to transfer on the Kubernetes Service onto the target.</td>
+</tr>
+<tr>
+<td>serviceMonitor.telemetryPath</td>
+<td>string</td>
+<td><code>"/metrics"</code></td>
+<td>Set path to mlflow telemetry-path</td>
+</tr>
+<tr>
+<td>serviceMonitor.timeout</td>
+<td>string</td>
+<td><code>"10s"</code></td>
+<td>Set timeout for scrape</td>
+</tr>
+<tr>
+<td>serviceMonitor.useServicePort</td>
+<td>bool</td>
+<td><code>false</code></td>
+<td>When set true then use a service port. On default use a pod port.</td>
+</tr>
+<tr>
+<td>strategy</td>
+<td>object</td>
+<td><code>{"rollingUpdate":{"maxSurge":"100%","maxUnavailable":0},"type":"RollingUpdate"}</code></td>
+<td>This will set the deployment strategy more information can be found here: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy</td>
+</tr>
+<tr>
+<td>telemetry</td>
+<td>object</td>
+<td><code>{"enabled":false}</code></td>
+<td>Mlflow Usage Tracking settings. More information can be found here: https://mlflow.org/docs/latest/community/usage-tracking/</td>
+</tr>
+<tr>
+<td>telemetry.enabled</td>
+<td>bool</td>
+<td><code>false</code></td>
+<td>Specifies if you want to enable collecting anonymized usage data about how core features of the platform are used.</td>
+</tr>
+<tr>
+<td>tolerations</td>
+<td>list</td>
+<td><code>[]</code></td>
+<td>For more information checkout: https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Homepage:</strong> <a href="https://mlflow.org">https://mlflow.org</a></p>
+<h2 id="source-code">Source Code</h2>
+<ul>
+<li><a href="https://github.com/mlflow-community/helm-charts">https://github.com/mlflow-community/helm-charts</a></li>
+<li><a href="https://github.com/mlflow/mlflow">https://github.com/mlflow/mlflow</a></li>
+</ul>
+<h2 id="chart-development">Chart Development</h2>
+<p>Please install unittest helm plugin with <code>helm plugin install https://github.com/helm-unittest/helm-unittest.git</code> command and use following command to run helm unit tests.</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #717171">helm unittest --strict --file &#39;unittests/**/*.yaml&#39; charts/mlflow</span>
+</code></pre></div>
+<h2 id="maintainers">Maintainers</h2>
+<p>This chart is maintained by the <a href="https://github.com/mlflow-community">mlflow-community</a> GitHub organization.</p>
+    </div>
+  </div>
+
+  <footer>
+    <p>
+      <a href="https://github.com/mlflow-community/helm-charts">GitHub</a> &nbsp;·&nbsp;
+      <a href="https://artifacthub.io/packages/helm/mlflow-community/mlflow">Artifact Hub</a> &nbsp;·&nbsp;
+      <a href="https://mlflow.org">MLflow</a>
+    </p>
+  </footer>
+</body>
+</html>
